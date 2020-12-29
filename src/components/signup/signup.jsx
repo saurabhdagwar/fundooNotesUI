@@ -5,12 +5,14 @@ import Button from "@material-ui/core/Button";
 import "./signup.css";
 import AccImg from "../assets/account.svg";
 import Services from "../Services/services";
-import { makeStyles } from '@material-ui/core/styles';
 const service = new Services();
-
 
 export default class signUp extends React.Component {
   
+  nextPath(path) {
+    this.props.history.push(path);
+  }
+
    state = {
     firstName: "",
     firstNameFlag: false,
@@ -18,9 +20,9 @@ export default class signUp extends React.Component {
     lastName: "",
     lastNameFlag: false,
     lastNameError: "",
-    username: "",
-    usernameFlag: false,
-    usernameError: "",
+    email: "",
+    emailFlag: false,
+    emailError: "",
     password: "",
     passwordFlag: false,
     passwordError: "",
@@ -28,7 +30,7 @@ export default class signUp extends React.Component {
     conformPasswordFlag: false,
     conformPasswordError: ""
   };
- 
+
   change = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -42,8 +44,8 @@ export default class signUp extends React.Component {
       firstNameFlag: false,
       lastNameError: "",
       lastNameFlag: false,
-      usernameError: "",
-      usernameFlag: false,
+      emailError: "",
+      emailFlag: false,
       passwordError: "",
       passwordFlag: false,
       conformPasswordError: "",
@@ -54,12 +56,10 @@ export default class signUp extends React.Component {
       errors.firstNameFlag = true;
       isError = true;
       errors.firstNameError = "Enter first name"
-      errors.lastNameError = ""
     }
     if (this.state.lastName.length == 0){
       errors.lastNameFlag = true;
       isError = true;
-      errors.firstNameError = "\u00a0"
       errors.lastNameError = "Enter last name"
     }
     
@@ -68,34 +68,38 @@ export default class signUp extends React.Component {
       errors.lastNameFlag = true;
       isError = true;
       errors.firstNameError = "Enter first and last names"
-      errors.lastNameError = "\u00a0"
+      errors.lastNameError = ""
     }
 
-    if (this.state.username.length == 0) {
-      errors.usernameFlag = true;
+   if (!/[a-zA-Z0-9._]+[@]{1}[a-zA-Z120-9]*[.]{1}[a-zA-Z]*$/.test(this.state.email)) {
+      errors.emailFlag = true;
       isError = true;
-      errors.usernameError = "Enter your user name";
+      errors.emailError = "Enter proper Email Id";
+    }
+
+    if (this.state.email.length == 0) {
+      errors.emailFlag = true;
+      isError = true;
+      errors.emailError = "Enter Email ";
     }
 
     if (this.state.password.length == 0) {
       errors.passwordFlag = true;
       isError = true;
       errors.passwordError = "Enter a password";
-      errors.conformPasswordError = "\u00a0";
+    }
+    
+    if(this.state.conformPassword != this.state.password){
+      errors.conformPasswordFlag = true;
+      isError = true;
+      errors.conformPasswordError = "Passwords didn't match.";
     }
 
     if (this.state.conformPassword.length == 0) {
       errors.conformPasswordFlag = true;
       isError = true;
-      errors.passwordError = "\u00a0";
+      errors.passwordError = "";
       errors.conformPasswordError = "Confirm your password";
-    }
-    if(this.state.conformPassword != this.state.password){
-      errors.conformPasswordFlag = true;
-      isError = true;
-      errors.passwordError = "Passwords didn't match.";
-      this.state.conformPassword = "aa";
-      errors.conformPasswordError = "\u00a0";
     }
 
     if(this.state.conformPassword.length == 0 && this.state.password.length == 0){
@@ -103,7 +107,7 @@ export default class signUp extends React.Component {
       errors.conformPasswordFlag = true;
       isError = true;
       errors.passwordError = "Enter a password";
-      errors.conformPasswordError = "\u00a0";
+      errors.conformPasswordError = "";
     }
 
     this.setState({
@@ -123,8 +127,8 @@ export default class signUp extends React.Component {
         firstNameFlag: false,
         lastNameError: "",
         lastNameFlag: false,
-        usernameFlag: false,
-        usernameError: "",
+        emailFlag: false,
+        emailError: "",
         passwordFlag: false,
         passwordError: "",
         conformPasswordFlag: false,
@@ -132,17 +136,18 @@ export default class signUp extends React.Component {
       });
       let registrationData = {"firstName": this.state.firstName,
       "lastName": this.state.lastName,
-       "phoneNumber": "8399288374",
        "service": "Advance",
-       "email": this.state.username,
+       "email": this.state.email,
       "password":this.state.password}
       service.Registration(registrationData)
       .then((registrationData) => {
         let obj = JSON.stringify(registrationData);
         console.log("Registration successful"+obj)
+        // this.successAlert();
       })
       .catch((registrationData) => {
-        console.log("Registration Failed"+registrationData)
+        console.log("Registration Failed"+registrationData);
+        // this.failedAlert();
       })
     }
     else{
@@ -172,7 +177,6 @@ export default class signUp extends React.Component {
                 <div className="inputField">
                   <TextField
                     autoCapitalize="off"
-                    className={classes.txtField}
                     name="firstName"
                     onChange={e => this.change(e)}
                     error={this.state.firstNameFlag}
@@ -189,7 +193,6 @@ export default class signUp extends React.Component {
                     size="small"
                     name="lastName"
                     label="Last Name"
-                    className={classes.txtField}
                     onChange={e => this.change(e)}
                     variant="outlined"
                     error={this.state.lastNameFlag}
@@ -204,13 +207,12 @@ export default class signUp extends React.Component {
                     size="small"
                     variant="outlined"
                     fullWidth
-                    className={classes.txtField}
-                    className="userNameField"
-                    name="username"
-                    helperText={this.state.usernameError}
-                    error={this.state.usernameFlag}
+                    className="emailField"
+                    name="email"
+                    helperText={this.state.emailError}
+                    error={this.state.emailFlag}
                     onChange={e => this.change(e)}
-                    label="Username"
+                    label="email"
                   />
                 </div>
               </div>
@@ -221,13 +223,11 @@ export default class signUp extends React.Component {
                     id="password"
                     label="Password"
                     name="password"
-                    className={classes.txtField}
                     onChange={e => this.change(e)}
                     error={this.state.passwordFlag}
                     helperText={this.state.passwordError}
                     fullWidth
                     type="password"
-                    // type={this.showPassword()}
                     variant="outlined"
                   />
                 </div>
@@ -237,13 +237,11 @@ export default class signUp extends React.Component {
                     id="password"
                     label="Confirm"
                     name="conformPassword"
-                    className={classes.txtField}
                     onChange={e => this.change(e)}
                     helperText={this.state.conformPasswordError}
                     error={this.state.conformPasswordFlag}
                     fullWidth
-                    type="password" 
-                    // type={this.showPassword()}
+                    type="password"
                     variant="outlined"
                   />
                 </div>
@@ -253,13 +251,12 @@ export default class signUp extends React.Component {
                   defaultChecked
                   id="passCheck"
                   color="primary"
-                  // onClick={this.showPassword()}
                   className="showPass"
                 />
                 Show Password
               </span>
               <div className="footerButtons">
-          <div className='signInLink'><Button color="primary">Sign In insted</Button></div>
+          <div className='signInLink'><Button color="primary" onClick={() => this.nextPath('../login')}>Sign In insted</Button></div>
             <div className="nextButton" >
               <Button variant="contained" color="primary"  onClick={e => this.onSubmit(e)} primary>
                 Next
