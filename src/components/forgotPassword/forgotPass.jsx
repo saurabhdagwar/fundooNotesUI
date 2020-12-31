@@ -1,11 +1,16 @@
-import React from 'react'
+import React from "react";
 import TextField from "@material-ui/core/TextField";
-import Button from '@material-ui/core/Button';
-import './forgotPass.css'
-import Services from "../Services/services";
+import Button from "@material-ui/core/Button";
+import "./forgotPass.css";
+import Services from "../Services/userServices";
 const service = new Services();
 
 export default class Hello extends React.Component {
+  
+  nextPath(path) {
+    this.props.history.push(path);
+  }
+
   state = {
     email: "",
     emailError: "",
@@ -23,13 +28,17 @@ export default class Hello extends React.Component {
     const errors = {
       emailError: "",
       emailFlag: false,
-    }
+    };
     if (this.state.email.length == 0) {
       errors.emailFlag = true;
       isError = true;
       errors.emailError = "Enter your Email ";
     }
-    if (!/[a-zA-Z0-9._]+[@]{1}[a-zA-Z120-9]*[.]{1}[a-zA-Z]*$/.test(this.state.email)) {
+    if (
+      !/[a-zA-Z0-9._]+[@]{1}[a-zA-Z120-9]*[.]{1}[a-zA-Z]*$/.test(
+        this.state.email
+      )
+    ) {
       errors.emailFlag = true;
       isError = true;
       errors.emailError = "Email is not proper";
@@ -48,11 +57,13 @@ export default class Hello extends React.Component {
       this.setState({
         emailFlag: false,
         emailError: "",
+        email: ""
       });
       let data = {
         email: this.state.email,
       };
-      service.forgotPassword(data)
+      service
+        .forgotPassword(data)
         .then((data) => {
           let obj = JSON.stringify(data);
           console.log("Mail Sended to given email" + obj);
@@ -64,12 +75,13 @@ export default class Hello extends React.Component {
     } else {
       console.log("Request Failed");
     }
-  }
+  };
 
-  render () {
-    return <div className='main'>
-      <div elevation={0} className="ForgetPassPage">
-      <span className="inlineTitle">
+  render() {
+    return (
+      <div className="main">
+        <div elevation={0} className="ForgetPassPage">
+          <span className="inlineTitle">
             <b>
               <font color="#1976d2">F</font>
               <font color="#e53935">u</font>
@@ -82,26 +94,39 @@ export default class Hello extends React.Component {
           <span className="title">Forgot Password</span>
           Enter your phone number or email
           <form className="Form">
-        <div className="inputField">
-        <TextField className='input'
-          label="Email"
-          variant="outlined"
-          name="email"
-          helperText={this.state.emailError}
-          error={this.state.emailFlag}
-          onChange={(e) => this.change(e)}
-        />
+            <div className="inputField">
+              <TextField
+                className="input"
+                label="Email"
+                variant="outlined"
+                name="email"
+                value={this.state.email}
+                helperText={this.state.emailError}
+                error={this.state.emailFlag}
+                onChange={(e) => this.change(e)}
+              />
+            </div>
+            <span className="buttonFooter">
+            <div className="signInLink">
+                  <Button
+                    color="primary"
+                    onClick={() => this.nextPath("../login")}>
+                    Sign In insted
+                  </Button>
+                </div>
+              <div className="button">
+                <Button
+                  variant="contained"
+                  onClick={(e) => this.onSubmit(e)}
+                  color="primary"
+                >
+                  Send
+                </Button>
+              </div>
+            </span>
+          </form>
         </div>
-        <span className="buttonFooter">
-        <div className="button">
-        <Button variant="contained"  
-        onClick={(e) => this.onSubmit(e)} color="primary">
-          Send
-        </Button>
-        </div>
-        </span>
-      </form>
       </div>
-    </div>
+    );
   }
 }

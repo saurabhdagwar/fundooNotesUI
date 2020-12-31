@@ -1,20 +1,28 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Services from "../Services/services";
-import "./resetPassword.css"
+import Services from "../Services/userServices";
+import "./resetPassword.css";
 const service = new Services();
 
 export default class forgotPassword extends React.Component {
-  state = {
-    password: "",
-    passwordError: "",
-    passwordFlag: false,
-    conformPassword: "",
-    conformPasswordError: "",
-    conformPasswordFlag: false,
-  };
+  nextPath(path) {
+    this.props.history.push(path);
+  }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: "",
+      passwordError: "",
+      passwordFlag: false,
+      conformPassword: "",
+      conformPasswordError: "",
+      conformPasswordFlag: false,
+    };
+  }
+  token = this.props.match.params.token;
+  
   change = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -37,7 +45,7 @@ export default class forgotPassword extends React.Component {
       errors.passwordError = "Enter Password";
     }
 
-    if(this.state.conformPassword != this.state.password){
+    if (this.state.conformPassword != this.state.password) {
       errors.conformPasswordFlag = true;
       isError = true;
       errors.conformPasswordError = "Passwords didn't match.";
@@ -59,19 +67,20 @@ export default class forgotPassword extends React.Component {
         conformPasswordError: "",
         passwordFlag: false,
         passwordError: "",
+        password: "",
+        conformPassword: "",
       });
       let resetPasswordData = {
-        password: this.state.password,
+        newPassword: this.state.password,
       };
       service
-        .resetPassword(resetPasswordData)
-        .then((resetPasswordData) => {
-          let obj = JSON.stringify(resetPasswordData);
+        .resetPassword(resetPasswordData, this.token).then((result) => {
+          let obj = JSON.stringify(result);
           console.log("Password reset successful" + obj);
+          this.nextPath("../login");
         })
-        .catch((resetPasswordData) => {
-          let obj = JSON.stringify(resetPasswordData);
-          console.log("Password reset Failed" + obj);
+        .catch((error) => {
+          console.log("Password reset Failed" + error);
         });
     } else {
       console.log("Reset Failed");
@@ -95,7 +104,7 @@ export default class forgotPassword extends React.Component {
           <span className="signIn">Reset Password</span>
           Use your Fundoo Account
           <form className="Form">
-          <div className="inputField">
+            <div className="inputField">
               <TextField
                 size="small"
                 className="input"
@@ -103,6 +112,7 @@ export default class forgotPassword extends React.Component {
                 type="password"
                 variant="outlined"
                 name="password"
+                value={this.state.password}
                 onChange={(e) => this.change(e)}
                 error={this.state.passwordFlag}
                 helperText={this.state.passwordError}
@@ -114,20 +124,25 @@ export default class forgotPassword extends React.Component {
                 className="input"
                 label="Conform"
                 variant="outlined"
+                type="password"
                 name="conformPassword"
+                value={this.state.conformPassword}
                 helperText={this.state.conformPasswordError}
                 error={this.state.conformPasswordFlag}
                 onChange={(e) => this.change(e)}
               />
             </div>
             <span className="buttonFooter">
-        <div className="button">
-        <Button variant="contained"  
-        onClick={(e) => this.onSubmit(e)} color="primary">
-          Set Password
-        </Button>
-        </div>
-        </span>
+              <div className="button">
+                <Button
+                  variant="contained"
+                  onClick={(e) => this.onSubmit(e)}
+                  color="primary"
+                >
+                  Set Password
+                </Button>
+              </div>
+            </span>
           </form>
         </div>
       </div>

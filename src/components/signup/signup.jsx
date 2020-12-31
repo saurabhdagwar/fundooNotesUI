@@ -4,15 +4,13 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import "./signup.css";
 import AccImg from "../assets/account.svg";
-import Services from "../Services/services";
-const service = new Services();
+import Services from "../Services/userServices";
 
+const service = new Services();
 export default class signUp extends React.Component {
-  
   nextPath(path) {
     this.props.history.push(path);
   }
-
    state = {
     firstName: "",
     firstNameFlag: false,
@@ -28,16 +26,24 @@ export default class signUp extends React.Component {
     passwordError: "",
     conformPassword: "",
     conformPasswordFlag: false,
-    conformPasswordError: ""
+    conformPasswordError: "",
+    showPassword: false,
+  };
+
+  clickShowPass = () => {
+    this.setState({
+      ...this.state,
+      showPassword: !this.state.showPassword,
+    });
   };
 
   change = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-    validate = () => {
+  validate = () => {
     let isError = false;
     const errors = {
       firstNameError: "",
@@ -52,26 +58,30 @@ export default class signUp extends React.Component {
       conformPasswordFlag: false,
     };
 
-    if (this.state.firstName.length == 0){
+    if (this.state.firstName.length == 0) {
       errors.firstNameFlag = true;
       isError = true;
-      errors.firstNameError = "Enter first name"
+      errors.firstNameError = "Enter first name";
     }
-    if (this.state.lastName.length == 0){
+    if (this.state.lastName.length == 0) {
       errors.lastNameFlag = true;
       isError = true;
-      errors.lastNameError = "Enter last name"
-    }
-    
-    if (this.state.lastName.length == 0 && this.state.firstName.length == 0){
-      errors.firstNameFlag = true;
-      errors.lastNameFlag = true;
-      isError = true;
-      errors.firstNameError = "Enter first and last names"
-      errors.lastNameError = ""
+      errors.lastNameError = "Enter last name";
     }
 
-   if (!/[a-zA-Z0-9._]+[@]{1}[a-zA-Z120-9]*[.]{1}[a-zA-Z]*$/.test(this.state.email)) {
+    if (this.state.lastName.length == 0 && this.state.firstName.length == 0) {
+      errors.firstNameFlag = true;
+      errors.lastNameFlag = true;
+      isError = true;
+      errors.firstNameError = "Enter first and last names";
+      errors.lastNameError = "";
+    }
+
+    if (
+      !/[a-zA-Z0-9._]+[@]{1}[a-zA-Z120-9]*[.]{1}[a-zA-Z]*$/.test(
+        this.state.email
+      )
+    ) {
       errors.emailFlag = true;
       isError = true;
       errors.emailError = "Enter proper Email Id";
@@ -88,8 +98,8 @@ export default class signUp extends React.Component {
       isError = true;
       errors.passwordError = "Enter a password";
     }
-    
-    if(this.state.conformPassword != this.state.password){
+
+    if (this.state.conformPassword != this.state.password) {
       errors.conformPasswordFlag = true;
       isError = true;
       errors.conformPasswordError = "Passwords didn't match.";
@@ -102,7 +112,10 @@ export default class signUp extends React.Component {
       errors.conformPasswordError = "Confirm your password";
     }
 
-    if(this.state.conformPassword.length == 0 && this.state.password.length == 0){
+    if (
+      this.state.conformPassword.length == 0 &&
+      this.state.password.length == 0
+    ) {
       errors.passwordFlag = true;
       errors.conformPasswordFlag = true;
       isError = true;
@@ -112,7 +125,7 @@ export default class signUp extends React.Component {
 
     this.setState({
       ...this.state,
-      ...errors
+      ...errors,
     });
 
     return isError;
@@ -123,37 +136,44 @@ export default class signUp extends React.Component {
     const err = this.validate();
     if (!err) {
       this.setState({
+        firstName: "",
         firstNameError: "",
         firstNameFlag: false,
+        lastName: "",
         lastNameError: "",
         lastNameFlag: false,
+        email: "",
         emailFlag: false,
         emailError: "",
+        password: "",
         passwordFlag: false,
         passwordError: "",
+        conformPassword: "",
         conformPasswordFlag: false,
-        conformPasswordError: ""
+        conformPasswordError: "",
       });
-      let registrationData = {"firstName": this.state.firstName,
-      "lastName": this.state.lastName,
-       "service": "Advance",
-       "email": this.state.email,
-      "password":this.state.password}
-      service.Registration(registrationData)
-      .then((registrationData) => {
-        let obj = JSON.stringify(registrationData);
-        console.log("Registration successful"+obj)
-        // this.successAlert();
-      })
-      .catch((registrationData) => {
-        console.log("Registration Failed"+registrationData);
-        // this.failedAlert();
-      })
-    }
-    else{
+      let registrationData = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        service: "Advance",
+        email: this.state.email,
+        password: this.state.password,
+      };
+      service
+        .Registration(registrationData)
+        .then((registrationData) => {
+          let obj = JSON.stringify(registrationData);
+          console.log("Registration successful" + obj);
+          this.nextPath("../login");
+        })
+        .catch((error) => {
+          console.log("Registration Failed" + error);
+  
+        });
+    } else {
       console.log("Registration Failed");
-     }
     }
+  };
   render() {
     return (
       <div className="registration">
@@ -178,14 +198,14 @@ export default class signUp extends React.Component {
                   <TextField
                     autoCapitalize="off"
                     name="firstName"
-                    onChange={e => this.change(e)}
+                    onChange={(e) => this.change(e)}
+                    value={this.state.firstName}
                     error={this.state.firstNameFlag}
                     helperText={this.state.firstNameError}
                     size="small"
                     label="First Name"
                     variant="outlined"
                     fullWidth
-                    
                   />
                 </div>
                 <div className="inputField">
@@ -193,8 +213,9 @@ export default class signUp extends React.Component {
                     size="small"
                     name="lastName"
                     label="Last Name"
-                    onChange={e => this.change(e)}
+                    onChange={(e) => this.change(e)}
                     variant="outlined"
+                    value={this.state.lastName}
                     error={this.state.lastNameFlag}
                     helperText={this.state.lastNameError}
                     fullWidth
@@ -209,9 +230,10 @@ export default class signUp extends React.Component {
                     fullWidth
                     className="emailField"
                     name="email"
+                    value={this.state.email}
                     helperText={this.state.emailError}
                     error={this.state.emailFlag}
-                    onChange={e => this.change(e)}
+                    onChange={(e) => this.change(e)}
                     label="email"
                   />
                 </div>
@@ -223,11 +245,12 @@ export default class signUp extends React.Component {
                     id="password"
                     label="Password"
                     name="password"
-                    onChange={e => this.change(e)}
+                    onChange={(e) => this.change(e)}
+                    value={this.state.password}
                     error={this.state.passwordFlag}
                     helperText={this.state.passwordError}
                     fullWidth
-                    type="password"
+                    type={this.state.showPassword ? "text" : "password"}
                     variant="outlined"
                   />
                 </div>
@@ -237,41 +260,54 @@ export default class signUp extends React.Component {
                     id="password"
                     label="Confirm"
                     name="conformPassword"
-                    onChange={e => this.change(e)}
+                    onChange={(e) => this.change(e)}
+                    value={this.state.conformPassword}
                     helperText={this.state.conformPasswordError}
                     error={this.state.conformPasswordFlag}
                     fullWidth
-                    type="password"
+                    type={this.state.showPassword ? "text" : "password"}
                     variant="outlined"
                   />
                 </div>
               </div>
               <span className="checkBoxInputs">
                 <Checkbox
-                  defaultChecked
-                  id="passCheck"
+                  onClick={this.clickShowPass}
                   color="primary"
                   className="showPass"
                 />
                 Show Password
               </span>
               <div className="footerButtons">
-          <div className='signInLink'><Button color="primary" onClick={() => this.nextPath('../login')}>Sign In insted</Button></div>
-            <div className="nextButton" >
-              <Button variant="contained" color="primary"  onClick={e => this.onSubmit(e)} primary>
-                Next
-              </Button>
-            </div>
-          </div>
+                <div className="signInLink">
+                  <Button
+                    color="primary"
+                    onClick={() => this.nextPath("../login")}>
+                    Sign In insted
+                  </Button>
+                </div>
+                <div className="nextButton">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => this.onSubmit(e)}
+                    primary
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
             </form>
             <div className="regImg">
               <img src={AccImg} alt="" />
-             <p className='ImgText'> One account. All of Fundoo working for you.</p>
+              <p className="ImgText">
+                {" "}
+                One account. All of Fundoo working for you.
+              </p>
             </div>
           </div>
-          
-          
         </div>
+       
       </div>
     );
   }

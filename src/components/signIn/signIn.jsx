@@ -1,24 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Services from "../Services/services";
-// import {withRouter} from "react-router-dom";
+import Services from "../Services/userServices";
+import Checkbox from "@material-ui/core/Checkbox";
 import "./signIn.css";
 const service = new Services();
 
-
 export default class signIn extends React.Component {
-
-  nextPath(path) {
-    this.props.history.push(path);
-  }
-  state = {
+  constructor(props){
+    super(props);
+    this.state = {
     email: "",
     password: "",
     emailError: "",
     emailFlag: false,
     passwordError: "",
     passwordFlag: false,
+    showPassword: false,
+  };
+  }
+
+  nextPath(path) {
+    this.props.history.push(path);
+  }
+
+  
+
+  clickShowPass = () => {
+    this.setState({
+      ...this.state,
+      showPassword: !this.state.showPassword,
+    });
   };
 
   change = (e) => {
@@ -64,8 +76,10 @@ export default class signIn extends React.Component {
     const err = this.validate();
     if (!err) {
       this.setState({
+        email: "",
         emailFlag: false,
         emailError: "",
+        password: "",
         passwordFlag: false,
         passwordError: "",
       });
@@ -76,8 +90,9 @@ export default class signIn extends React.Component {
       service
         .login(loginData)
         .then((loginData) => {
-          let obj = JSON.stringify(loginData);
-          console.log("Login successful" + obj);
+        console.log("Login Successful "+JSON.stringify(loginData.data))
+        let data = JSON.stringify(loginData.data);
+        localStorage.setItem("fundooStorage",data);
         })
         .catch((loginData) => {
           let obj = JSON.stringify(loginData);
@@ -105,31 +120,42 @@ export default class signIn extends React.Component {
           <span className="signIn">Sign in</span>
           Use your Fundoo Account
           <form className="loginForm">
-            <div className="inputField">
+            <div className="inputfield">
               <TextField
                 size="small"
                 className="input"
                 label="Email"
                 variant="outlined"
                 name="email"
+                value={this.state.email}
                 helperText={this.state.emailError}
                 error={this.state.emailFlag}
                 onChange={(e) => this.change(e)}
               />
             </div>
-            <div className="inputField">
+            <div className="passField">
               <TextField
                 size="small"
                 className="input"
                 label="Password"
-                type="password"
+                type={this.state.showPassword ? "text" : "password"}
                 variant="outlined"
                 name="password"
+                value={this.state.password}
                 onChange={(e) => this.change(e)}
                 error={this.state.passwordFlag}
                 helperText={this.state.passwordError}
               />
+               
             </div>
+            <span className="checkBox">
+                <Checkbox
+                  onClick={this.clickShowPass}
+                  color="primary"
+                  className="showPass"
+                />
+                Show Password
+              </span>
             <div className="forgetPassword">
               <Button color="primary" onClick={() => this.nextPath('../forgotPassword')}>Forgot password?</Button>
             </div>
