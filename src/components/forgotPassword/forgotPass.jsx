@@ -3,19 +3,31 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import "./forgotPass.css";
 import Services from "../Services/userServices";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 const service = new Services();
+
+function Alert(props) {
+  return <MuiAlert variant="filled" {...props} />;
+}
 
 export default class Hello extends React.Component {
   
   nextPath(path) {
     this.props.history.push(path);
   }
-
-  state = {
-    email: "",
-    emailError: "",
-    emailFlag: false,
-  };
+  constructor(props){
+    super(props)
+    this.state = {
+      email: "",
+      emailError: "",
+      emailFlag: false,
+      setOpen: false,
+      open: false,
+      snackMessage: "",
+      snackType: ""
+    };
+  }
 
   change = (e) => {
     this.setState({
@@ -67,10 +79,12 @@ export default class Hello extends React.Component {
         .then((data) => {
           let obj = JSON.stringify(data);
           console.log("Mail Sended to given email" + obj);
+          this.setState({snackType: "success", snackMessage: "Mail Sended to given email", open: true, setOpen: true})
         })
         .catch((data) => {
           let obj = JSON.stringify(data);
           console.log("Request Failed" + obj);
+          this.setState({snackType: "error", snackMessage: "Request Failed", open: true, setOpen: true})
         });
     } else {
       console.log("Request Failed");
@@ -126,6 +140,13 @@ export default class Hello extends React.Component {
             </span>
           </form>
         </div>
+        <div>
+        <Snackbar open={this.state.open} autoHideDuration={3000} >
+          <Alert severity={this.state.snackType}>
+            {this.state.snackMessage}
+          </Alert>
+        </Snackbar>
+      </div>
       </div>
     );
   }

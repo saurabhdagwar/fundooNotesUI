@@ -8,7 +8,9 @@ import Drawer from "./components/dashbord/drawer.jsx"
 import Toolbar from "./components/dashbord/toolbar.jsx"
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
+
 function App() {
+
   return (
     <div>
       <div className="App">
@@ -19,10 +21,12 @@ function App() {
             <Route path="/forgotPassword" component={ForgotPass} exact />
             <Route path="/resetpassword/:token" component={ResetPass} exact />
             <Route path="/drawer" component={Drawer} exact />
-            <Route path="/toolbar" component={Toolbar} exact />
+          <Route path="/toolbar" component={Toolbar} exact />
           </Switch>
+          
         </BrowserRouter>
-      </div>   
+      </div>
+     
     </div>
   );
 }

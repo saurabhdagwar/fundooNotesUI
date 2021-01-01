@@ -3,8 +3,14 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Services from "../Services/userServices";
 import Checkbox from "@material-ui/core/Checkbox";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import "./signIn.css";
 const service = new Services();
+
+function Alert(props) {
+  return <MuiAlert variant="filled" {...props} />;
+}
 
 export default class signIn extends React.Component {
   constructor(props){
@@ -17,14 +23,16 @@ export default class signIn extends React.Component {
     passwordError: "",
     passwordFlag: false,
     showPassword: false,
+    setOpen: false,
+    open: false,
+    snackMessage: "",
+    snackType: ""
   };
   }
 
   nextPath(path) {
     this.props.history.push(path);
   }
-
-  
 
   clickShowPass = () => {
     this.setState({
@@ -92,11 +100,13 @@ export default class signIn extends React.Component {
         .then((loginData) => {
         console.log("Login Successful "+JSON.stringify(loginData.data))
         let data = JSON.stringify(loginData.data);
+        this.setState({snackType: "success", snackMessage: "Login successful", open: true, setOpen: true})
         localStorage.setItem("fundooStorage",data);
         })
         .catch((loginData) => {
           let obj = JSON.stringify(loginData);
           console.log("Login Failed" + obj);
+          this.setState({snackType: "error", snackMessage: "Login Failed", open: true, setOpen: true})
         });
     } else {
       console.log("Login Failed");
@@ -176,6 +186,13 @@ export default class signIn extends React.Component {
             </span>
           </form>
         </div>
+        <div>
+        <Snackbar open={this.state.open} autoHideDuration={3000} >
+          <Alert severity={this.state.snackType}>
+            {this.state.snackMessage}
+          </Alert>
+        </Snackbar>
+      </div>
       </div>
     );
   }

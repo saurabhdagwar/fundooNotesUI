@@ -5,31 +5,47 @@ import Button from "@material-ui/core/Button";
 import "./signup.css";
 import AccImg from "../assets/account.svg";
 import Services from "../Services/userServices";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert variant="filled" {...props} />;
+}
 
 const service = new Services();
+
 export default class signUp extends React.Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      firstName: "",
+      firstNameFlag: false,
+      firstNameError: "",
+      lastName: "",
+      lastNameFlag: false,
+      lastNameError: "",
+      email: "",
+      emailFlag: false,
+      emailError: "",
+      password: "",
+      passwordFlag: false,
+      passwordError: "",
+      conformPassword: "",
+      conformPasswordFlag: false,
+      conformPasswordError: "",
+      showPassword: false,
+      setOpen: false,
+      open: false,
+      snackMessage: "",
+      snackType: ""
+    };
+  }
+
   nextPath(path) {
     this.props.history.push(path);
   }
-   state = {
-    firstName: "",
-    firstNameFlag: false,
-    firstNameError: "",
-    lastName: "",
-    lastNameFlag: false,
-    lastNameError: "",
-    email: "",
-    emailFlag: false,
-    emailError: "",
-    password: "",
-    passwordFlag: false,
-    passwordError: "",
-    conformPassword: "",
-    conformPasswordFlag: false,
-    conformPasswordError: "",
-    showPassword: false,
-  };
-
+ 
   clickShowPass = () => {
     this.setState({
       ...this.state,
@@ -164,13 +180,15 @@ export default class signUp extends React.Component {
         .then((registrationData) => {
           let obj = JSON.stringify(registrationData);
           console.log("Registration successful" + obj);
+          this.setState({snackType: "success", snackMessage: "Registration successful", open: true, setOpen: true})
           this.nextPath("../login");
         })
         .catch((error) => {
           console.log("Registration Failed" + error);
-  
+          this.setState({snackType: "error", snackMessage: "Registration Failed", open: true, setOpen: true})
         });
     } else {
+      // this.setState({snackType: "error", snackMessage: "Registration Failed", open: true, setOpen: true})
       console.log("Registration Failed");
     }
   };
@@ -307,7 +325,13 @@ export default class signUp extends React.Component {
             </div>
           </div>
         </div>
-       
+        <div>
+        <Snackbar open={this.state.open} autoHideDuration={3000} >
+          <Alert severity={this.state.snackType}>
+            {this.state.snackMessage}
+          </Alert>
+        </Snackbar>
+      </div>
       </div>
     );
   }

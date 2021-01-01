@@ -2,8 +2,14 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Services from "../Services/userServices";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import "./resetPassword.css";
 const service = new Services();
+
+function Alert(props) {
+  return <MuiAlert variant="filled" {...props} />;
+}
 
 export default class forgotPassword extends React.Component {
   nextPath(path) {
@@ -19,6 +25,10 @@ export default class forgotPassword extends React.Component {
       conformPassword: "",
       conformPasswordError: "",
       conformPasswordFlag: false,
+      setOpen: false,
+      open: false,
+      snackMessage: "",
+      snackType: ""
     };
   }
   token = this.props.match.params.token;
@@ -72,15 +82,18 @@ export default class forgotPassword extends React.Component {
       });
       let resetPasswordData = {
         newPassword: this.state.password,
+      
       };
       service
         .resetPassword(resetPasswordData, this.token).then((result) => {
           let obj = JSON.stringify(result);
           console.log("Password reset successful" + obj);
+          this.setState({snackType: "success", snackMessage: "Password reset successful", open: true, setOpen: true})
           this.nextPath("../login");
         })
         .catch((error) => {
           console.log("Password reset Failed" + error);
+          this.setState({snackType: "error", snackMessage: "Password reset Failed", open: true, setOpen: true})
         });
     } else {
       console.log("Reset Failed");
@@ -145,6 +158,13 @@ export default class forgotPassword extends React.Component {
             </span>
           </form>
         </div>
+        <div>
+        <Snackbar open={this.state.open} autoHideDuration={3000} >
+          <Alert severity={this.state.snackType}>
+            {this.state.snackMessage}
+          </Alert>
+        </Snackbar>
+      </div>
       </div>
     );
   }
