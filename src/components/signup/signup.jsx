@@ -4,7 +4,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import "./signup.css";
 import AccImg from "../assets/account.svg";
-import Services from "../Services/userServices";
+import Services from "../../Services/userServices";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
