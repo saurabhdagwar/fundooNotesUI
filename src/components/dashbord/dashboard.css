@@ -5,13 +5,28 @@
   margin-top: 60px;
   border: none;
 }
-.drawerButton:hover{
-    background-color: rgb(236, 236, 236);
-   border-top-right-radius: 50px;
-   border-bottom-right-radius: 50px;
+.drawerButton:hover {
+  background-color: rgb(236, 236, 236);
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
 }
+
 .topBar {
   display: flex;
+  justify-content: space-between;
+}
+.leftOptions{
+  width: 75%;
+  /* border: black solid; */
+  display: flex;
+  justify-self: start;
+  justify-content: space-between;
+}
+.rightOptions{
+  width: 23%;
+  /* border: black solid; */
+  display: flex;
+  justify-self: end;
   justify-content: space-between;
 }
 .headerIcon {
@@ -31,12 +46,16 @@
   font-family: "Product Sans", Arial, sans-serif;
 }
 .search {
+  margin: 5px 5px 5px 5px;
   height: 9vh;
-  width: 40vw;
+  width: 72%;
   display: flex;
   align-items: center;
   background-color: rgb(238, 238, 238);
   border-radius: 8px;
+}
+.searchedButton{
+  display: none;
 }
 .searchIcon {
   margin-left: 3%;
@@ -48,13 +67,21 @@
 .appsContainer {
   display: flex;
 }
-.mainContent{
-  margin: 10vh 0 0 10vw;
-  width: 85vw;
-  height: 80vh;
+.mainContent {
+  padding: 8%;
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
- 
 }
 
+@media only screen and (max-width: 800px){
+.search{
+  display: none;
+}
+.searchedButton{
+  display: initial;
+}
+}

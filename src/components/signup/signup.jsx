@@ -179,16 +179,16 @@ export default class signUp extends React.Component {
         .Registration(registrationData)
         .then((registrationData) => {
           let obj = JSON.stringify(registrationData);
-          console.log("Registration successful" + obj);
           this.setState({snackType: "success", snackMessage: "Registration successful", open: true, setOpen: true})
-          this.nextPath("../login");
+          console.log("Registration successful" + obj);
+          setTimeout(this.nextPath("../login"),2000)
         })
         .catch((error) => {
           console.log("Registration Failed" + error);
           this.setState({snackType: "error", snackMessage: "Registration Failed", open: true, setOpen: true})
         });
     } else {
-      // this.setState({snackType: "error", snackMessage: "Registration Failed", open: true, setOpen: true})
+      this.setState({snackType: "error", snackMessage: "Registration Failed", open: true, setOpen: true})
       console.log("Registration Failed");
     }
   };
@@ -326,7 +326,7 @@ export default class signUp extends React.Component {
           </div>
         </div>
         <div>
-        <Snackbar open={this.state.open} autoHideDuration={3000} >
+        <Snackbar open={this.state.open} >
           <Alert severity={this.state.snackType}>
             {this.state.snackMessage}
           </Alert>

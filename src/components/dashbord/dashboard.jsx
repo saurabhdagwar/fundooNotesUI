@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import "./dashboard.css";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     zIndex: theme.zIndex.drawer + 1,
     borderBottom: "lightgray solid 1px",
+    width: "100%",
     boxShadow: "none",
   },
   hide: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerOpen: {
     width: "22%",
+    boxShadow: "",
     borderRight: "#ffff",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -45,9 +47,10 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   drawerClose: {
+    overflowX: 'hidden',
     borderRight: "#ffff",
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(9) ,
     },
   },
 }));
@@ -56,6 +59,14 @@ export default function Dashboard() {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
+
+  const drawerOpen = () => {
+    setOpen(true);
+  }
+
+  const drawerClose = () => {
+    setOpen(false);
+  }
 
   const drawerOpenClose = () => {
     if (checkOpen == "open") {
@@ -78,7 +89,8 @@ export default function Dashboard() {
         className={classes.appBar}
       >
         <Toolbar className="topBar">
-          <div className="startOptions">
+          <span className="leftOptions">        
+            <div className="startOptions">
             <div className="menuButton">
               <IconButton onClick={drawerOpenClose} edge="start">
                 <MenuIcon />
@@ -106,7 +118,14 @@ export default function Dashboard() {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
+          </span>
+          <span className="rightOptions">
           <div className="buttonContainer">
+          <div className="searchedButton">
+              <IconButton aria-label="open drawer">
+              <SearchIcon />
+              </IconButton>
+            </div>
             <div className="button">
               <IconButton aria-label="open drawer">
                 <ReplayOutlinedIcon />
@@ -137,11 +156,13 @@ export default function Dashboard() {
               </IconButton>
             </div>
           </div>
+          </span>
         </Toolbar>
       </AppBar>
 
-      <Drawer
+      <Drawer onMouseOver={drawerOpen}
         variant="permanent"
+        color="transparent"
         className={classes.drawerMain}
         classes={{
           paper: clsx(classes.drawer,{
@@ -236,7 +257,7 @@ export default function Dashboard() {
         </div>
       </Drawer>
 
-      <main className={classes.main} className="mainContent">
+      <main onMouseOver={drawerClose} className={classes.main} className="mainContent">
         {" "}
         <AddNotes />
       </main>

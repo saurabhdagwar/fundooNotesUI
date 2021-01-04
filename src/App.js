@@ -19,7 +19,7 @@ function App() {
             <Route path="/login" component={SignIn} exact />
             <Route path="/forgotPassword" component={ForgotPass} exact />
             <Route path="/resetpassword/:token" component={ResetPass} exact />
-            <Route path="/dashboard" component={Dashboard} exact />
+            <Route path="/dashboard/:userId" component={Dashboard} exact />
           </Switch>
           
         </BrowserRouter>

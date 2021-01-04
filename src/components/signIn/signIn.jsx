@@ -98,10 +98,11 @@ export default class signIn extends React.Component {
       service
         .login(loginData)
         .then((loginData) => {
-        console.log("Login Successful "+JSON.stringify(loginData.data))
+        console.log("Login Successful "+JSON.stringify(loginData.data.id))
         let data = JSON.stringify(loginData.data);
         this.setState({snackType: "success", snackMessage: "Login successful", open: true, setOpen: true})
         localStorage.setItem("fundooStorage",data);
+        setTimeout(this.nextPath(`../dashboard/${loginData.data.userId}`),2000)
         })
         .catch((loginData) => {
           let obj = JSON.stringify(loginData);
