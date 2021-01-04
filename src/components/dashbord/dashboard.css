@@ -48,11 +48,10 @@
 .appsContainer {
   display: flex;
 }
-.main{
-  margin-top: 10vh;
-  width: 80vw;
+.mainContent{
+  margin: 10vh 0 0 10vw;
+  width: 85vw;
   height: 80vh;
-  border: gray solid;
   display: flex;
   flex-direction: column;
   align-items: center;
