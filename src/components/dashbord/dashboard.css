@@ -1,28 +1,31 @@
 .root {
   display: flex;
 }
-.drawerList {
-  margin-top: 60px;
-  border: none;
+.lastContent {
+  display: flex;
+  align-items: flex-start;
+}
+.drawerButton {
+  margin: 8px 0 8px 0;
 }
 .drawerButton:hover {
   background-color: rgb(236, 236, 236);
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
+  border-top-right-radius: 70px;
+  border-bottom-right-radius: 70px;
 }
-
 .topBar {
   display: flex;
   justify-content: space-between;
 }
-.leftOptions{
+
+.leftOptions {
   width: 75%;
   /* border: black solid; */
   display: flex;
   justify-self: start;
   justify-content: space-between;
 }
-.rightOptions{
+.rightOptions {
   width: 23%;
   /* border: black solid; */
   display: flex;
@@ -54,7 +57,7 @@
   background-color: rgb(238, 238, 238);
   border-radius: 8px;
 }
-.searchedButton{
+.searchedButton {
   display: none;
 }
 .searchIcon {
@@ -68,20 +71,23 @@
   display: flex;
 }
 .mainContent {
-  padding: 8%;
-  background-color: white;
+  top: 4vh;
+  padding: 3%;
+  min-height: 85vh;
+  /* box-sizing: border-box; */
+  /* position: relative; */
   width: 100vw;
-  height: 100vh;
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-@media only screen and (max-width: 800px){
-.search{
-  display: none;
-}
-.searchedButton{
-  display: initial;
-}
+@media only screen and (max-width: 900px) {
+  .search {
+    display: none;
+  }
+  .searchedButton {
+    display: initial;
+  }
 }

@@ -1,8 +1,11 @@
 import React from "react";
 import InputBase from "@material-ui/core/InputBase";
 import { makeStyles } from "@material-ui/core/styles";
+// import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
+import BrushOutlinedIcon from '@material-ui/icons/BrushOutlined';
 import IconButton from "@material-ui/core/IconButton";
-import AddAlertIcon from '@material-ui/icons/AddAlertOutlined';
+import AddAlertIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddIcon from "@material-ui/icons/PersonAddOutlined";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
@@ -18,9 +21,7 @@ const useStyles = makeStyles(() => ({
   noteInput: {
     padding: "10px 15px",
   },
-  input: {
-
-  }
+  input: {},
 }));
 
 function TitleNote() {
@@ -47,14 +48,27 @@ export default function AddNote() {
   return (
     <div className="addNotesMain">
       <div className="notesField" onClick={clickedNote}>
-        <div className="addNoteField" style={{ display: showTitle ? "block" : "none" }}>
+        <div
+          className="addNoteField"
+          style={{ display: showTitle ? "block" : "none" }}
+        >
           <TitleNote />
         </div>
-        <div className="addNoteField" className="noteInput" >
-          <InputBase className={classes.input} placeholder="Take a note..." />
+        <div class="simpleNoteShow">
+          <div className="addNoteField" className="noteInput">
+            <InputBase className={classes.input} placeholder="Take a note..." />
+          </div>
+          <div style={{ display: showTitle ? "none" : "block" }}>
+            <IconButton><CheckBoxOutlinedIcon /></IconButton>
+            <IconButton><BrushOutlinedIcon /> </IconButton>
+            <IconButton> <ImageOutlinedIcon /> </IconButton>
+          </div>
         </div>
       </div>
-      <div className="addNoteField" style={{ display: showTitle ? "block" : "none" }}>
+      <div
+        className="addNoteField"
+        style={{ display: showTitle ? "block" : "none" }}
+      >
         <div className="addNoteOptions">
           <div className="optionButton">
             <IconButton aria-label="open drawer">
