@@ -81,9 +81,7 @@ export default class Hello extends React.Component {
           console.log("Mail Sended to given email" + obj);
           this.setState({snackType: "success", snackMessage: "Mail Sended to given email", open: true, setOpen: true})
         })
-        .catch((data) => {
-          let obj = JSON.stringify(data);
-          console.log("Request Failed" + obj);
+        .catch((err) => {
           this.setState({snackType: "error", snackMessage: "Request Failed", open: true, setOpen: true})
         });
     } else {

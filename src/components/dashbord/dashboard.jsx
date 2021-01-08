@@ -23,7 +23,7 @@ import AppsRoundedIcon from "@material-ui/icons/AppsRounded";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
-import AddNotes from "../addNotes/addNotes";
+import DisplayNotes from "../displayNotes/displayNotes"
 
 var checkOpen = "close";
 const useStyles = makeStyles((theme) => ({
@@ -69,12 +69,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [notes, setNotes] = React.useState(false);
+  const [notes, setNotes] = React.useState(true);
   const [reminders, setReminders] = React.useState(false);
   const [editLabels, setEditLabels] = React.useState(false);
   const [achive, setAchive] = React.useState(false);
@@ -99,15 +99,12 @@ export default function Dashboard() {
   };
 
   const drawerOpenClose = () => {
-    if (checkOpen == "open") {
-      setOpen(false);
-      checkOpen = "close";
-    } else if (checkOpen == "close") {
-      setOpen(true);
-      checkOpen = "open";
-    }
-    console.log(checkOpen);
+    setOpen(!open);
   };
+
+  const printNotes = () => {
+    // refs.child.setDisplayNote();
+  }
 
   const notesSelect = () => {
     setNotes(true);
@@ -150,7 +147,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="root" className={classes.root}>
+    <div className="root" className={classes.root} onLoad={printNotes}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -245,6 +242,7 @@ export default function Dashboard() {
           </span>
         </Toolbar>
       </AppBar>
+      <div>
        <Drawer
         onMouseOver={drawerOpen}
         variant="permanent"
@@ -340,11 +338,10 @@ export default function Dashboard() {
     
       <main 
         onMouseOver={drawerClose}
-        className={classes.main}
-        className="mainContent"
-      >
-        <AddNotes />
+        className={classes.main}>
+       <DisplayNotes  />
       </main>
+      </div>
     </div>
   );
 }

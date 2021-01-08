@@ -181,7 +181,7 @@ export default class signUp extends React.Component {
           let obj = JSON.stringify(registrationData);
           this.setState({snackType: "success", snackMessage: "Registration successful", open: true, setOpen: true})
           console.log("Registration successful" + obj);
-          setTimeout(this.nextPath("../login"),2000)
+          setTimeout(() => {  this.nextPath("../login"); }, 2000);
         })
         .catch((error) => {
           console.log("Registration Failed" + error);

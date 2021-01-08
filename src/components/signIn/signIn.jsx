@@ -79,6 +79,13 @@ export default class signIn extends React.Component {
     return isError;
   };
 
+  handleClose = () => {
+    this.setState({
+      open: false,
+      setOpen: false
+    })
+  };
+
   onSubmit = (e) => {
     e.preventDefault();
     const err = this.validate();
@@ -99,10 +106,14 @@ export default class signIn extends React.Component {
         .login(loginData)
         .then((loginData) => {
         console.log("Login Successful "+JSON.stringify(loginData.data.id))
-        let data = JSON.stringify(loginData.data);
+        localStorage.setItem("fundooToken",loginData.data.id)
+        localStorage.setItem("fundooUserFName",loginData.data.firstName)
+        localStorage.setItem("fundooUserLName",loginData.data.lastName)
+        localStorage.setItem("fundooUserEmail",loginData.data.email)
+        localStorage.setItem("fundooUserUserId",loginData.data.userId)
         this.setState({snackType: "success", snackMessage: "Login successful", open: true, setOpen: true})
-        localStorage.setItem("fundooStorage",data);
-        setTimeout(this.nextPath(`../dashboard`),2000)
+        setTimeout(() => {  this.nextPath(`../dashboard`); }, 3000);
+        
         })
         .catch((loginData) => {
           let obj = JSON.stringify(loginData);
@@ -188,11 +199,11 @@ export default class signIn extends React.Component {
           </form>
         </div>
         <div>
-        <Snackbar open={this.state.open} autoHideDuration={3000} >
+        <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}  >
           <Alert severity={this.state.snackType}>
             {this.state.snackMessage}
           </Alert>
-        </Snackbar>
+        </Snackbar >
       </div>
       </div>
     );

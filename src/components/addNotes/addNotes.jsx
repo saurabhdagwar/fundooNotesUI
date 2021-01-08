@@ -1,17 +1,14 @@
 import React from "react";
 import InputBase from "@material-ui/core/InputBase";
 import { makeStyles } from "@material-ui/core/styles";
-// import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import BrushOutlinedIcon from '@material-ui/icons/BrushOutlined';
 import IconButton from "@material-ui/core/IconButton";
-import AddAlertIcon from "@material-ui/icons/AddAlertOutlined";
-import PersonAddIcon from "@material-ui/icons/PersonAddOutlined";
-import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
-import SystemUpdateAltOutlinedIcon from "@material-ui/icons/SystemUpdateAltOutlined";
-import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
+import NoteOptions from "../noteOptions/noteOptions.jsx";
+import Services from "../../Services/noteServices";
 import "./addNotes.css";
+const service = new Services();
 
 const useStyles = makeStyles(() => ({
   titleInput: {
@@ -21,42 +18,63 @@ const useStyles = makeStyles(() => ({
   noteInput: {
     padding: "10px 15px",
   },
-  input: {},
 }));
 
-function TitleNote() {
-  const classes = useStyles();
-  return (
-    <div className="titleInput" className={classes.titleInput}>
-      <InputBase className={classes.input} placeholder="Title" />
-    </div>
-  );
-}
 
-export default function AddNote() {
+export default function AddNote(props) {
   const classes = useStyles();
   var [showTitle, titleDisplay] = React.useState(false);
+  var [title, setTitle] = React.useState();
+  var [note, setNote] = React.useState();
+  const [clr, setClr] = React.useState(`#fafafa`);
+  const [displayNote, setDisplayNote] = React.useState(false);
+
+  const setColor = (color) => {
+      console.log(color)
+    setClr(color);
+  };
 
   const clickedNote = () => {
     titleDisplay(true);
   };
 
   const closeNote = () => {
+    let formData = new FormData(); 
+      if(title == "" && note == ""){
+          console.log("Please Enter Data");
+          titleDisplay(false);
+          return null;
+      }
+      formData.append('title', title);
+      formData.append('description', note);
+      formData.append('color', clr);
+      service.addNote(formData)
+      .then((data) => {
+          props.setDisplayNote();
+        console.log(data)
+      })
+      .catch((err) => {
+          console.log(err);
+      })
+      setTitle("");
+      setNote("");
+      setClr("#fafafa")
     titleDisplay(false);
   };
 
+  
   return (
-    <div className="addNotesMain">
+    <div className="addNotesMain" onClickAway={closeNote} style={{backgroundColor: clr}}>
+       
       <div className="notesField" onClick={clickedNote}>
-        <div
-          className="addNoteField"
-          style={{ display: showTitle ? "block" : "none" }}
-        >
-          <TitleNote />
+        <div className="addNoteField" style={{ display: showTitle ? "block" : "none" }}>
+           <div className="titleInput" className={classes.titleInput}>
+        <InputBase className={classes.input} placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      </div>
         </div>
         <div class="simpleNoteShow">
           <div className="addNoteField" className="noteInput">
-            <InputBase className={classes.input} placeholder="Take a note..." />
+            <InputBase className={classes.input} placeholder="Take a note..." value={note} onChange={(e) => setNote(e.target.value)}  />
           </div>
           <div style={{ display: showTitle ? "none" : "block" }}>
             <IconButton><CheckBoxOutlinedIcon /></IconButton>
@@ -70,26 +88,7 @@ export default function AddNote() {
         style={{ display: showTitle ? "block" : "none" }}
       >
         <div className="addNoteOptions">
-          <div className="optionButton">
-            <IconButton aria-label="open drawer">
-              <AddAlertIcon />
-            </IconButton>
-            <IconButton aria-label="open drawer">
-              <PersonAddIcon />
-            </IconButton>
-            <IconButton aria-label="open drawer">
-              <ColorLensOutlinedIcon />
-            </IconButton>
-            <IconButton aria-label="open drawer">
-              <ImageOutlinedIcon />
-            </IconButton>
-            <IconButton aria-label="open drawer">
-              <SystemUpdateAltOutlinedIcon />
-            </IconButton>
-            <IconButton aria-label="open drawer">
-              <MoreVertOutlinedIcon />
-            </IconButton>
-          </div>
+            <NoteOptions setColor={setColor}/>
           <div className="closeNotes" onClick={closeNote}>
             CLOSE
           </div>
