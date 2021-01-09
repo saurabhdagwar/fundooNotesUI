@@ -14,6 +14,7 @@ import Menu from "@material-ui/core/Menu";
 import Paper from '@material-ui/core/Paper';
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchIcon from "@material-ui/icons/Search";
+import Services from "../../Services/noteServices";
 import SettingsSharpIcon from "@material-ui/icons/SettingsOutlined";
 import DnsRoundedIcon from "@material-ui/icons/DnsRounded";
 import ReplayOutlinedIcon from "@material-ui/icons/ReplayOutlined";
@@ -24,6 +25,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import DisplayNotes from "../displayNotes/displayNotes"
+const service = new Services();
 
 var checkOpen = "close";
 const useStyles = makeStyles((theme) => ({
@@ -41,17 +43,19 @@ const useStyles = makeStyles((theme) => ({
     height: "1.1em"  
   },
   drawer: {
-    paddingLeft: "3px",
-    top: "10vh",
+    position: "absolute",
+    zIndex: "1",
+    top: "12vh",
     whiteSpace: "pre",
   },
   drawerOpen: {
     width: "22%",
-    borderRight: "none",
+    borderRight: "lightgray solid 1px",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+
   },
   drawerClose: {
     overflowX: "hidden",
@@ -61,7 +65,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   drawerButton: {
-     borderRadius: "100px",
+    borderTopRightRadius: "100px",
+    borderBottomRightRadius: "100px"
   },
 
   settingMenu: {
@@ -79,6 +84,7 @@ export default function Dashboard(props) {
   const [editLabels, setEditLabels] = React.useState(false);
   const [achive, setAchive] = React.useState(false);
   const [trash, setTrash] = React.useState(false);
+  const [show, setShow] = React.useState([]);
 
   const drawerOpen = () => {
     setOpen(true);
@@ -145,6 +151,23 @@ export default function Dashboard(props) {
     setAchive(false);
     setTrash(true);
   }
+
+  React.useEffect(() => {
+    getAllNotes();
+  },[])
+
+  const getAllNotes = () => {
+    service.getNotes()
+      .then((data) => {
+        let arrayData = data.data.data.data;
+        console.log(arrayData);
+        setShow(arrayData);
+      })
+      .catch((err) => {
+        console.log("error = " + err);
+      });
+     
+  };
 
   return (
     <div className="root" className={classes.root} onLoad={printNotes}>
@@ -245,6 +268,7 @@ export default function Dashboard(props) {
       <div>
        <Drawer
         onMouseOver={drawerOpen}
+        onMouseLeave={drawerClose}
         variant="permanent"
         color="transparent"
         className={classes.drawerMain}
@@ -337,9 +361,9 @@ export default function Dashboard(props) {
       </Drawer>
     
       <main 
-        onMouseOver={drawerClose}
+        // onMouseOver={drawerClose}
         className={classes.main}>
-       <DisplayNotes  />
+       <DisplayNotes  notes={show} />
       </main>
       </div>
     </div>

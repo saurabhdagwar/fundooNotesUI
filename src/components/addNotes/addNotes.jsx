@@ -30,7 +30,6 @@ export default function AddNote(props) {
   const [displayNote, setDisplayNote] = React.useState(false);
 
   const setColor = (color) => {
-      console.log(color)
     setClr(color);
   };
 
@@ -43,6 +42,7 @@ export default function AddNote(props) {
       if(title == "" && note == ""){
           console.log("Please Enter Data");
           titleDisplay(false);
+          props.setDisplayNote();
           return null;
       }
       formData.append('title', title);
@@ -50,12 +50,12 @@ export default function AddNote(props) {
       formData.append('color', clr);
       service.addNote(formData)
       .then((data) => {
-          props.setDisplayNote();
         console.log(data)
       })
       .catch((err) => {
           console.log(err);
       })
+      props.setDisplayNote();
       setTitle("");
       setNote("");
       setClr("#fafafa")
@@ -64,7 +64,7 @@ export default function AddNote(props) {
 
   
   return (
-    <div className="addNotesMain" onClickAway={closeNote} style={{backgroundColor: clr}}>
+    <div className="addNotesMain" onMouseLeave={closeNote} style={{backgroundColor: clr}}>
        
       <div className="notesField" onClick={clickedNote}>
         <div className="addNoteField" style={{ display: showTitle ? "block" : "none" }}>

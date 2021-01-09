@@ -7,5 +7,8 @@ export default class axiosServices {
 
     Get = (url, isHeaderRequired = false ) => {
         return axios.get(url, isHeaderRequired)
-    } 
+    }
+    Delete = (url, isHeaderRequired = false ) => {
+        return axios.delete(url, isHeaderRequired)
+    }  
 }

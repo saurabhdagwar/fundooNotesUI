@@ -8,6 +8,7 @@ import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import SystemUpdateAltOutlinedIcon from "@material-ui/icons/SystemUpdateAltOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import "./noteOptions.css"
 
@@ -45,7 +46,7 @@ export default function NoteOptions(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const [anchorE2, setAnchorE2] = React.useState(null);
   const colors = [
     {color: "#fafafa"},
     {color: "#ef9a9a"},
@@ -61,12 +62,24 @@ export default function NoteOptions(props) {
     {color: "#cfd8dc"},
   ];
 
+  const deleteHandleOpen = (event) => {
+    setAnchorE2(event.currentTarget);
+  }
+
+  const deletesHandleClose = () => {
+    setAnchorE2(null);
+  };
+
+  const deleted = () => {
+    props.setDelete();
+    setAnchorE2(null);
+  }
+
   const colorsHandleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const colorsHandleClose = () => {
-    setOpen(false);
     setAnchorEl(null);
   };
 
@@ -78,7 +91,7 @@ export default function NoteOptions(props) {
 
   const ColorBlock = () => {
     return (
-      <div className={classes.colorMenu}>
+      <div className={classes.colorMenu} onMouseLeave={colorsHandleClose}>
             {colors.map((color) => (
              <IconButton className={classes.colorButton} onClick={(e) => passColor(e,color.color)} style={{ backgroundColor: color.color }} ></IconButton>
             ))}
@@ -104,7 +117,7 @@ export default function NoteOptions(props) {
       <IconButton className={classes.button}>
         <SystemUpdateAltOutlinedIcon />
       </IconButton>
-      <IconButton className={classes.button}>
+      <IconButton className={classes.button} onClick={deleteHandleOpen}>
         <MoreVertOutlinedIcon />
       </IconButton>
       </div>
@@ -114,6 +127,18 @@ export default function NoteOptions(props) {
           <ColorBlock className="colorBlock" />
         </Menu>
         </Paper>
+      </div>
+      <div>
+      <Paper>
+                <Menu
+                  className={classes.settingMenu}
+                  anchorEl={anchorE2}
+                  open={Boolean(anchorE2)}
+                  onClose={deletesHandleClose}
+                >
+                  <MenuItem onClick={deleted}>Delete</MenuItem>
+                </Menu>
+                </Paper>
       </div>
     </div>
   );
