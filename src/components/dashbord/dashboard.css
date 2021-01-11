@@ -70,19 +70,7 @@
 .appsContainer {
   display: flex;
 }
-.mainContent {
-  top: 7vh;
-  margin-top: 5%;
-  padding: 5vh;
-  min-height: 85vh;
-  /* box-sizing: border-box; */
-  /* position: relative; */
-  width: 100vw;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 .displayNotes{
   width: 85vw;
   margin: 1%;

@@ -24,7 +24,8 @@ import AppsRoundedIcon from "@material-ui/icons/AppsRounded";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
-import DisplayNotes from "../displayNotes/displayNotes"
+// import DisplayNotes from "../displayNotes/displayNotes"
+import Notes from "../Notes/Notes"
 const service = new Services();
 
 var checkOpen = "close";
@@ -43,8 +44,6 @@ const useStyles = makeStyles((theme) => ({
     height: "1.1em"  
   },
   drawer: {
-    position: "absolute",
-    zIndex: "1",
     top: "12vh",
     whiteSpace: "pre",
   },
@@ -55,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-
   },
   drawerClose: {
     overflowX: "hidden",
@@ -361,9 +359,8 @@ export default function Dashboard(props) {
       </Drawer>
     
       <main 
-        // onMouseOver={drawerClose}
         className={classes.main}>
-       <DisplayNotes  notes={show} />
+       <Notes  notes={show} />
       </main>
       </div>
     </div>

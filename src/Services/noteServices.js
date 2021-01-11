@@ -31,7 +31,17 @@ export default class noteServices {
       });
   };
 
-  deleteNotes = (data, fk) => {
+  changeColor = (data) => {
+    const user = localStorage.getItem("fundooToken");
+    console.log(data);
+    return http.Post(`${baseUrl}/notes/changesColorNotes`, data, {
+      headers: {
+        Authorization: `${user}`,
+      },
+    });
+  };
+
+  deleteNotes = (data) => {
     const user = localStorage.getItem("fundooToken");
     console.log(data);
     return http.Post(`${baseUrl}/notes/trashNotes`, data, {
@@ -40,4 +50,5 @@ export default class noteServices {
       },
     });
   };
+
 }

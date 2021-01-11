@@ -1,4 +1,5 @@
 .App {
+  background-color: #ffff;
   display: flex;
   flex-direction: column;
   justify-content: center;

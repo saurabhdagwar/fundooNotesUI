@@ -10,7 +10,9 @@ import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
+import Services from "../../Services/noteServices";
 import "./noteOptions.css"
+const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
   optionButton: {
@@ -47,6 +49,9 @@ export default function NoteOptions(props) {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
+  const [noteId, setNoteId] = React.useState(props.editId);
+  const [edit, setEdit] = React.useState(props.setEdited);
+
   const colors = [
     {color: "#fafafa"},
     {color: "#ef9a9a"},
@@ -85,6 +90,19 @@ export default function NoteOptions(props) {
 
   const passColor = (e,colr) => {
     e.stopPropagation();
+    if(edit){
+      let data = {
+        color: colr,
+        noteIdList: [noteId],
+      };
+      service.changeColor(data)
+      .then((data) => {
+        console.log("Update Color: "+data);
+      })
+      .catch((err) => {
+        console.log("Update Color Error = " + err);
+      });
+    }
     console.log(colr);
     props.setColor(colr);
   };

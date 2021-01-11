@@ -1,0 +1,10 @@
+.mainContent {
+    margin-top: 60px;
+    padding: 5vh;
+    min-height: 85vh;
+    width: 98vw;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }

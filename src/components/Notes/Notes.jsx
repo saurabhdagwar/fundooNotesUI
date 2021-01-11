@@ -1,14 +1,14 @@
 import React from  "react";
-import AddNote from "../addNotes/addNotes"
+import AddNotes from "../addNotes/addNotes";
 import DisplayNotes from "../displayNotes/displayNotes";
+import "./Notes.css"
 
-export default function Notes() {
-
-
-
+export default function Notes(props) {
+    
     return (
-        <div>
-
+        <div className="mainContent">
+            <AddNotes  setDisplayNote={props.setDisplayNote}/>        
+            <DisplayNotes notes={props.notes} />
         </div>
     )
 }
