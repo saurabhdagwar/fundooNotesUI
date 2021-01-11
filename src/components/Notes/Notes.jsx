@@ -7,8 +7,8 @@ export default function Notes(props) {
     
     return (
         <div className="mainContent">
-            <AddNotes  setDisplayNote={props.setDisplayNote}/>        
-            <DisplayNotes notes={props.notes} />
+            <AddNotes  /*setDisplayNote={props.getall}*/ />        
+            <DisplayNotes notes={props.notes} /*getAll={props.getall()}*/ />
         </div>
     )
 }

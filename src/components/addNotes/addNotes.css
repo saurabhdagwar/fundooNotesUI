@@ -1,4 +1,5 @@
 .addNotesMain {
+    position: relative;
   width: 600px;
   display: flex;
   flex-direction: column;
@@ -44,4 +45,9 @@
     .addNotesMain {
         width: 100%;
     }
+}
+@media only screen and (max-width: 455px){
+   .noteInput{
+       width: 45%;
+   }
 }

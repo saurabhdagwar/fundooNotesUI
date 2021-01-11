@@ -5,7 +5,7 @@ import NoteOptions from "../noteOptions/noteOptions.jsx";
 import Services from "../../Services/noteServices";
 import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
-import "./displayNotes.css";
+import "./trashNotes.css";
 const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
@@ -92,7 +92,7 @@ export default function DisplayNotes(props) {
     return (
       <div className="AllNotes">
         {props.notes
-          .filter((data) => data.isDeleted === false)
+          .filter((data) => data.isDeleted === true)
           .filter((data) => data.isArchived === false)
           .map((data) => (
             <div
@@ -112,7 +112,7 @@ export default function DisplayNotes(props) {
   };
 
   return (
-    <div>
+    <div className="mainContent">
       <div className="displayNotes">
         <Note />
       </div>

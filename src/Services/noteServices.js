@@ -51,4 +51,13 @@ export default class noteServices {
     });
   };
 
+  archiveNote = (data) => {
+    const user = localStorage.getItem("fundooToken");
+    console.log(data);
+    return http.Post(`${baseUrl}/notes/archiveNotes`, data, {
+      headers: {
+        Authorization: `${user}`,
+      },
+    });
+  }
 }

@@ -112,7 +112,7 @@ export default class signIn extends React.Component {
         localStorage.setItem("fundooUserEmail",loginData.data.email)
         localStorage.setItem("fundooUserUserId",loginData.data.userId)
         this.setState({snackType: "success", snackMessage: "Login successful", open: true, setOpen: true})
-        setTimeout(() => {  this.nextPath(`../dashboard`); }, 3000);
+        setTimeout(() => {  this.nextPath(`../dashboard/notes`); }, 3000);
         
         })
         .catch((loginData) => {

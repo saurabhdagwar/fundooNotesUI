@@ -10,12 +10,21 @@
     border-radius: 8px;
     margin: 1%;
 }
+.inputBlock{
+    display: flex;
+    flex-direction: column;
+}
+.noteOption{
+    display: none;
+}
+.noteBlock:hover .noteOption{
+    display: block;
+}
 .AllNotes{
     display: flex;
-    justify-content: flex-end;
-    /* align-items: center; */
-    flex-flow: row-reverse wrap-reverse;
+    flex-flow: wrap;
 }
+
 .addnoteNone{
     display: none;
 }

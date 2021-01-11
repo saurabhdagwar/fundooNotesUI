@@ -14,6 +14,7 @@ const useStyles = makeStyles(() => ({
   titleInput: {
     padding: "10px 15px",
     width: "70%",
+    
   },
   noteInput: {
     padding: "10px 15px",
@@ -68,12 +69,12 @@ export default function AddNote(props) {
         });
       titleDisplay(false);
       props.dialogOff();
+      // props.getAll();
     } else {
       service
         .addNote(formData)
         .then((data) => {
           console.log("Add Notes: " + data);
-          props.setDisplayNote();
         })
         .catch((err) => {
           console.log("Error = " + err);
@@ -81,6 +82,7 @@ export default function AddNote(props) {
       setTitle("");
       setNote("");
       setClr("#fafafa");
+      // props.getAll;
       titleDisplay(false);
     }
   };
@@ -106,7 +108,7 @@ export default function AddNote(props) {
           </div>
         </div>
         <div class="simpleNoteShow">
-          <div className="addNoteField" className="noteInput">
+          <div className="noteInput">
             <InputBase
               className={classes.input}
               placeholder="Take a note..."
@@ -137,6 +139,7 @@ export default function AddNote(props) {
             setColor={setColor}
             setEdited={edit}
             editId={props.editId}
+            // getAll={props.getAll}
           />
           <IconButton className={classes.closeNotes} onClick={closeNote}>
             {" "}
