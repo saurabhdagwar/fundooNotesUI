@@ -7,6 +7,9 @@ import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import SystemUpdateAltOutlinedIcon from "@material-ui/icons/SystemUpdateAltOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
+import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
+import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
+import RestoreFromTrashRoundedIcon from "@material-ui/icons/RestoreFromTrashRounded";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
@@ -51,6 +54,8 @@ export default function NoteOptions(props) {
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [noteId, setNoteId] = React.useState(props.editId);
   const [edit, setEdit] = React.useState(props.setEdited);
+  const [archive, setArchive] = React.useState(props.archive);
+  const [trash, setTrash] = React.useState(props.trash);
 
   const colors = [
     { color: "#fafafa" },
@@ -78,6 +83,7 @@ export default function NoteOptions(props) {
   const deleted = () => {
     props.setDelete();
     setAnchorE2(null);
+    props.getall();
   };
 
   const colorsHandleClick = (event) => {
@@ -99,28 +105,54 @@ export default function NoteOptions(props) {
         .changeColor(data)
         .then((data) => {
           console.log("Update Color: " + data);
+          console.log(colr);
+          props.getall();
         })
         .catch((err) => {
           console.log("Update Color Error = " + err);
         });
     }
-    console.log(colr);
-    props.setColor(colr);
   };
 
   const archiveNote = () => {
     let data = {
       noteIdList: [noteId],
-      isArchived : true
-    }
-    service.archiveNote(data)
-    .then((data) => {
-      console.log("Archived Note: " + data);
-    })
-    .catch((err) => {
-      console.log("Archived note err = " + err);
-    })
+      isArchived: true,
+      isDeleted: false,
+    };
+    service
+      .archiveNote(data)
+      .then((data) => {
+        console.log("Archived Note: " + data);
+      })
+      .catch((err) => {
+        console.log("Archived Note err = " + err);
+      });
+  };
+
+  const deleteForever = () => {
+      
   }
+
+  const restore = () => {
+
+  }
+
+  const unArchiveNote = () => {
+    let data = {
+      noteIdList: [noteId],
+      isArchived: false,
+    };
+    service
+      .archiveNote(data)
+      .then((data) => {
+        props.getall();
+        console.log("UnArchived Note: " + data);
+      })
+      .catch((err) => {
+        console.log("UnArchived Note err = " + err);
+      });
+  };
 
   const ColorBlock = () => {
     return (
@@ -139,24 +171,44 @@ export default function NoteOptions(props) {
   return (
     <div>
       <div className={classes.optionButton}>
-        <IconButton className={classes.button}>
-          <AddAlertIcon />
-        </IconButton>
-        <IconButton className={classes.button}>
-          <PersonAddIcon />
-        </IconButton>
-        <IconButton onMouseOver={colorsHandleClick} className={classes.button}>
-          <ColorLensOutlinedIcon />
-        </IconButton>
-        <IconButton className={classes.button}>
-          <ImageOutlinedIcon />
-        </IconButton>
-        <IconButton className={classes.button} onClick={archiveNote}>
-          <SystemUpdateAltOutlinedIcon />
-        </IconButton>
-        <IconButton className={classes.button} onClick={deleteHandleOpen}>
-          <MoreVertOutlinedIcon />
-        </IconButton>
+        {trash ? (
+          <div>
+            <IconButton className={classes.button}>
+              <DeleteForeverRoundedIcon onClick={deleteForever()}/>
+            </IconButton>
+            <IconButton className={classes.button}>
+              <RestoreFromTrashRoundedIcon onClick={restore()}/>
+            </IconButton>
+          </div>
+        ) : (
+          <div>
+            <IconButton className={classes.button}>
+              <AddAlertIcon />
+            </IconButton>
+            <IconButton className={classes.button}>
+              <PersonAddIcon />
+            </IconButton>
+            <IconButton
+              onMouseOver={colorsHandleClick}
+              className={classes.button}
+            >
+              <ColorLensOutlinedIcon />
+            </IconButton>
+            <IconButton className={classes.button}>
+              <ImageOutlinedIcon />
+            </IconButton>
+            <IconButton className={classes.button}>
+              {archive ? (
+                <PublishRoundedIcon onClick={unArchiveNote} />
+              ) : (
+                <SystemUpdateAltOutlinedIcon onClick={archiveNote} />
+              )}
+            </IconButton>
+            <IconButton className={classes.button} onClick={deleteHandleOpen}>
+              <MoreVertOutlinedIcon />
+            </IconButton>
+          </div>
+        )}
       </div>
       <div
         className={classes.colorWindow}

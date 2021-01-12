@@ -33,13 +33,11 @@ export default function AddNote(props) {
   var [showTitle, titleDisplay] = React.useState(props.editOpen);
   var [title, setTitle] = React.useState(props.editTitle);
   var [note, setNote] = React.useState(props.editDisc);
-  const [clr, setClr] = React.useState(props.editColor);
+  const [clr, setClr] = React.useState("#fafafa");
   const [edit, setEdit] = React.useState(props.setEdited);
   const [noteId, setNoteId] = React.useState(props.editId);
-
-  const setColor = (color) => {
-    setClr(color);
-  };
+  const [archive, setArchive] = React.useState(props.archive);
+  const [trash, setTrash] = React.useState(props.trash);
 
   const clickedNote = () => {
     titleDisplay(true);
@@ -51,30 +49,33 @@ export default function AddNote(props) {
       console.log("Please Enter Data");
       setClr("#fafafa");
       titleDisplay(false);
-      return null;
       props.dialogOff();
+      return null;
     }
     formData.append("title", title);
     formData.append("description", note);
-    formData.append("color", clr);
     if (edit) {
+      setClr(props.editColor);
+      formData.append("color", clr);
       formData.append("noteId", noteId);
       service
         .updateNotes(formData)
         .then((data) => {
           console.log("Update Data: " + data);
+          props.getall();
         })
         .catch((err) => {
           console.log("Update Data Error = " + err);
         });
       titleDisplay(false);
       props.dialogOff();
-      // props.getAll();
     } else {
+    formData.append("color", clr);
       service
         .addNote(formData)
         .then((data) => {
           console.log("Add Notes: " + data);
+          props.getall();
         })
         .catch((err) => {
           console.log("Error = " + err);
@@ -82,7 +83,6 @@ export default function AddNote(props) {
       setTitle("");
       setNote("");
       setClr("#fafafa");
-      // props.getAll;
       titleDisplay(false);
     }
   };
@@ -136,15 +136,16 @@ export default function AddNote(props) {
       >
         <div className="addNoteOptions">
           <NoteOptions
-            setColor={setColor}
+            setColor={setClr}
             setEdited={edit}
             editId={props.editId}
-            // getAll={props.getAll}
+            archive={archive}
+            trash={trash}
           />
+          {trash ? " " :
           <IconButton className={classes.closeNotes} onClick={closeNote}>
-            {" "}
-            CLOSE{" "}
-          </IconButton>
+            CLOSE
+          </IconButton>}
         </div>
       </div>
     </div>

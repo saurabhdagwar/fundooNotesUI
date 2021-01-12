@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Route, Redirect} from "react-router-dom";
 let authenticated = false;
 
-const  isAuthenticated = () =>{
+const  isAuthenticated = () => {
     if(localStorage.getItem("fundooToken") === null){
       authenticated = false;
     }

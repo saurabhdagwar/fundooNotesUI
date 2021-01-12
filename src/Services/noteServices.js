@@ -60,4 +60,32 @@ export default class noteServices {
       },
     });
   }
+
+  getArchiveNotes = () => {
+    const user = localStorage.getItem("fundooToken");
+    return http.Get(`${baseUrl}/notes/getArchiveNotesList`, {
+      headers: {
+        Authorization: `${user}`,
+      },
+    });
+  }
+
+  getTrashNotes = () => {
+    const user = localStorage.getItem("fundooToken");
+    return http.Get(`${baseUrl}/notes/getTrashNotesList`, {
+      headers: {
+        Authorization: `${user}`,
+      },
+    });
+  }
+
+  deleteForever = (data) => {
+    const user = localStorage.getItem("fundooToken");
+    console.log(data);
+    return http.Post(`${baseUrl}/notes/deleteForeverNotes`, data, {
+      headers: {
+        Authorization: `${user}`,
+      },
+    });
+  }
 }

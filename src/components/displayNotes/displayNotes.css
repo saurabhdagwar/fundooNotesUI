@@ -1,6 +1,6 @@
 .noteBlock{
     width: 250px;
-    min-height: 22vh;
+    min-height: 120px;
     padding: 8px;
     display: flex;
     flex-direction: column;
@@ -16,12 +16,14 @@
 }
 .noteOption{
     display: none;
+    cursor: pointer;
 }
 .noteBlock:hover .noteOption{
     display: block;
 }
 .AllNotes{
     display: flex;
+    /* flex-direction: column-reverse; */
     flex-flow: wrap;
 }
 

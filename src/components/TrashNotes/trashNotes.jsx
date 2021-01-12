@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import { makeStyles } from "@material-ui/core/styles";
-import NoteOptions from "../noteOptions/noteOptions.jsx";
 import Services from "../../Services/noteServices";
 import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
+import NoteOptions from "../noteOptions/noteOptions.jsx";
 import "./trashNotes.css";
 const service = new Services();
 
@@ -21,59 +21,41 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
   },
-
-  showOpt: {
-    display: "block",
-  },
-
-  hideOpt: {
-    display: "none",
-    
-  },
-
 }));
 
-export default function DisplayNotes(props) {
+export default function TrashNotes(props) {
   const classes = useStyles();
-  const [option, setOption] = React.useState(false);
-  const [opt, setOpt] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   var [title, setTitle] = React.useState("");
   var [note, setNote] = React.useState("");
   const [clr, setClr] = React.useState("#fafafa");
   const [noteId, setNoteId] = React.useState();
-  var [dialogTitle, setdialogTitle] = React.useState("");
-  var [dialogNote, setdialogNote] = React.useState("");
-  var dialogTitle, dialogNote;
+  const [trash, setTrash] =  React.useState(true);
+  const [data, setData] = React.useState([]);
+ 
+  React.useEffect(() => {
+    getTrashNotes();
+  }, []);
 
-  const setDelete = () => {
-    let data = {
-      noteIdList: [noteId],
-      isDeleted: true,
-    };
-    service
-      .deleteNotes(data)
+  const getTrashNotes = () => {
+    service.getTrashNotes()
       .then((data) => {
-        console.log(data);
-        console.log(noteId);
-        // props.getAll()
-        // props.setDisplayNote;
+        let arrayData = data.data.data.data;
+        let array = arrayData.reverse();
+        console.log("Trash Note List"+array);
+        setData(array);
       })
       .catch((err) => {
         console.log("error = " + err);
-        dialogClose();
       });
-    setOpen(false);
   };
 
   const dialogOpen = (e, data) => {
     e.stopPropagation();
     setEdit(true)
     setTitle(data.title);
-    setdialogTitle(data.title);
     setNote(data.description);
-    setdialogNote(data.description);
     setClr(data.color);
     setNoteId(data.id);
      setOpen(true);
@@ -91,10 +73,7 @@ export default function DisplayNotes(props) {
   const Note = () => {
     return (
       <div className="AllNotes">
-        {props.notes
-          .filter((data) => data.isDeleted === true)
-          .filter((data) => data.isArchived === false)
-          .map((data) => (
+        {data.map((data) => (
             <div
               className="noteBlock"
               style={{ backgroundColor: data.color }}>
@@ -102,8 +81,14 @@ export default function DisplayNotes(props) {
                 <InputBase placeholder="Title" value={data.title} />
                 <InputBase placeholder="Take a Note..." value={data.description} />
               </div>
-              <div onMouseEnter={(e) => storeOption(e,data.id)} onMouseOver={setEdit(true)} className="noteOption">
-                <NoteOptions setDelete={setDelete} editId={data.id} setEdited={edit} />
+              <div
+                onMouseEnter={(e) => {
+                  storeOption(e, data.id);
+                  setClr(clr);
+                }}
+                onMouseOver={setEdit(true)}
+                className="noteOption">
+              <NoteOptions trash={trash}/>
               </div>
             </div>
           ))}
@@ -120,7 +105,7 @@ export default function DisplayNotes(props) {
         <Dialog
           open={open}
           onClose={dialogClose} >
-            <AddNote setEdited={edit} dialogOff={dialogClose} editOpen={open} editId={noteId} editTitle={title} editDisc={note} editColor={clr} className={classes.dialogBox} />
+            <AddNote trash={trash} setEdited={edit} dialogOff={dialogClose} editOpen={open} editId={noteId} editTitle={title} editDisc={note} editColor={clr} className={classes.dialogBox} />
         </Dialog>
       </div>
     </div>

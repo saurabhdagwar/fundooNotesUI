@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import "./dashboard.css";
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -14,7 +14,6 @@ import Menu from "@material-ui/core/Menu";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchIcon from "@material-ui/icons/Search";
-import Services from "../../Services/noteServices";
 import SettingsSharpIcon from "@material-ui/icons/SettingsOutlined";
 import DnsRoundedIcon from "@material-ui/icons/DnsRounded";
 import ReplayOutlinedIcon from "@material-ui/icons/ReplayOutlined";
@@ -24,28 +23,26 @@ import AppsRoundedIcon from "@material-ui/icons/AppsRounded";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
-// import DisplayNotes from "../displayNotes/displayNotes"
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import ProtectedRoutes from "../../protectedRoutes.js";
 import Notes from "../Notes/Notes";
-import ArchiveNotes from "../archiveNotes/archiveNotes"
-import TrashNotes from "../TrashNotes/trashNotes"
-const service = new Services();
+import ArchiveNotes from "../archiveNotes/archiveNotes";
+import TrashNotes from "../TrashNotes/trashNotes";
 
 var checkOpen = "close";
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
-    zIndex : "0",
-    backgroundColor: "white",
+    backgroundColor: "#ffff",
     borderBottom: "lightgray solid 1px",
     boxShadow: "none",
   },
-  topBar:{
-    display: 'flex',
-    justifyContent: "space-between"
+  topBar: {
+    backgroundColor: "#ffff",
+    display: "flex",
+    justifyContent: "space-between",
   },
   hide: {
     display: "none",
@@ -59,11 +56,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   drawer: {
-    top: "12%",
+    top: "70px",
     whiteSpace: "nowrap",
-    [theme.breakpoints.down("xs")]: {
-      top: "10%"
-      },
   },
   drawerOpen: {
     width: "230px",
@@ -73,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     [theme.breakpoints.down("xs")]: {
-    width: "180px"
+      width: "180px",
     },
   },
   drawerClose: {
@@ -85,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     borderRight: "none",
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1 ,
+      width: theme.spacing(8) + 1,
     },
   },
   drawerButton: {
@@ -96,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
   settingMenu: {
     marginTop: theme.spacing(4),
   },
- 
+
   main: {
     marginTop: "80px",
     marginLeft: "100px",
@@ -105,12 +99,12 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     width: "95%",
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-  }
+  },
 }));
 
 export default function Dashboard(props) {
@@ -142,10 +136,10 @@ export default function Dashboard(props) {
   const settingHandleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const profileHandleOpen = (event) => {
     setAnchorE2(event.currentTarget);
-  }
+  };
   const profileHandleClose = () => {
     setAnchorE2(null);
   };
@@ -205,41 +199,19 @@ export default function Dashboard(props) {
     nextPath("../dashboard/trash");
   };
 
-  React.useEffect(() => {
-    getAllNotes();
-  }, []);
-
-  const getAllNotes = () => {
-    // e.stopPropagation();
-    service
-      .getNotes()
-      .then((data) => {
-        let arrayData = data.data.data.data;
-        console.log(arrayData);
-        setShow(arrayData);
-      })
-      .catch((err) => {
-        console.log("error = " + err);
-      });
-  };
-
   const logOut = () => {
     localStorage.removeItem("fundooUserFName");
     localStorage.removeItem("fundooUserFName");
-     localStorage.removeItem("fundooToken");
-     localStorage.removeItem("fundooUserUserId");
-     localStorage.removeItem("fundooUserEmail");
-     nextPath("../login");
-  }
+    localStorage.removeItem("fundooToken");
+    localStorage.removeItem("fundooUserUserId");
+    localStorage.removeItem("fundooUserEmail");
+    nextPath("../login");
+  };
 
   return (
     <div className="root" className={classes.root} onLoad={printNotes}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        position="fixed"
-        className={classes.appBar}
-      >
+      <AppBar position="fixed" position="fixed" className={classes.appBar}>
         <Toolbar className={classes.topBar}>
           <span className="leftOptions">
             <div className="startOptions">
@@ -327,7 +299,10 @@ export default function Dashboard(props) {
                 </IconButton>
               </div>
               <div className="button">
-                <IconButton className={classes.iconButton} onClick={profileHandleOpen}>
+                <IconButton
+                  className={classes.iconButton}
+                  onClick={profileHandleOpen}
+                >
                   <AccountCircleOutlinedIcon className={classes.iconLogo} />
                 </IconButton>
                 <Paper>
@@ -335,18 +310,27 @@ export default function Dashboard(props) {
                     className={classes.settingMenu}
                     anchorEl={anchorE2}
                     open={Boolean(anchorE2)}
-                    onClose={profileHandleClose}>
-                    <MenuItem >{localStorage.getItem("fundooUserFName")} {localStorage.getItem("fundooUserLName")}</MenuItem>
-                    <MenuItem >{localStorage.getItem("fundooUserEmail")} </MenuItem>
-                    <MenuItem onClick={logOut} color="primary"> LogOut </MenuItem>
+                    onClose={profileHandleClose}
+                  >
+                    <MenuItem>
+                      {localStorage.getItem("fundooUserFName")}{" "}
+                      {localStorage.getItem("fundooUserLName")}
+                    </MenuItem>
+                    <MenuItem>
+                      {localStorage.getItem("fundooUserEmail")}{" "}
+                    </MenuItem>
+                    <MenuItem onClick={logOut} color="primary">
+                      {" "}
+                      LogOut{" "}
+                    </MenuItem>
                   </Menu>
                 </Paper>
               </div>
             </div>
           </span>
-          </Toolbar>
+        </Toolbar>
       </AppBar>
-      <div >
+      <div>
         <Drawer
           onMouseOver={drawerOpen}
           onMouseLeave={drawerClose}
@@ -459,13 +443,13 @@ export default function Dashboard(props) {
           <div className={classes.content}>
             <Switch>
               <ProtectedRoutes path="/dashboard/notes">
-                <Notes notes={show} getall={getAllNotes} />
+                <Notes />
               </ProtectedRoutes>
               <ProtectedRoutes path="/dashboard/archive">
-                <ArchiveNotes notes={show} getall={getAllNotes} />
+                <ArchiveNotes />
               </ProtectedRoutes>
               <ProtectedRoutes path="/dashboard/trash">
-                <TrashNotes notes={show} getall={getAllNotes} />
+                <TrashNotes />
               </ProtectedRoutes>
             </Switch>
           </div>

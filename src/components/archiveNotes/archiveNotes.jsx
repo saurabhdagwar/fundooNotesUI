@@ -10,7 +10,6 @@ const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
   dialogBox: {
-    // width: "40vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -21,44 +20,49 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
   },
-
-  showOpt: {
-    display: "block",
-  },
-
-  hideOpt: {
-    display: "none",
-    
-  },
-
 }));
 
-export default function DisplayNotes(props) {
+export default function ArchiveNotes(props) {
   const classes = useStyles();
-  const [option, setOption] = React.useState(false);
-  const [opt, setOpt] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   var [title, setTitle] = React.useState("");
   var [note, setNote] = React.useState("");
   const [clr, setClr] = React.useState("#fafafa");
   const [noteId, setNoteId] = React.useState();
-  var [dialogTitle, setdialogTitle] = React.useState("");
-  var [dialogNote, setdialogNote] = React.useState("");
-  var dialogTitle, dialogNote;
+  const [data, setData] = React.useState([]);
+  const [archive, setArchive] = React.useState(true);
+
+  React.useEffect(() => {
+    getArchiveNotes();
+  }, []);
+
+  const getArchiveNotes = () => {
+    service.getArchiveNotes()
+      .then((data) => {
+        let arrayData = data.data.data.data;
+        let array = arrayData.reverse();
+        console.log("Archive Note List"+array);
+        setData(array);
+      })
+      .catch((err) => {
+        console.log("error = " + err);
+      });
+  };
+
 
   const setDelete = () => {
     let data = {
       noteIdList: [noteId],
       isDeleted: true,
+      isArchived : false
     };
     service
       .deleteNotes(data)
       .then((data) => {
         console.log(data);
         console.log(noteId);
-        // props.getAll()
-        // props.setDisplayNote;
+        getArchiveNotes();
       })
       .catch((err) => {
         console.log("error = " + err);
@@ -71,9 +75,7 @@ export default function DisplayNotes(props) {
     e.stopPropagation();
     setEdit(true)
     setTitle(data.title);
-    setdialogTitle(data.title);
     setNote(data.description);
-    setdialogNote(data.description);
     setClr(data.color);
     setNoteId(data.id);
      setOpen(true);
@@ -91,10 +93,7 @@ export default function DisplayNotes(props) {
   const Note = () => {
     return (
       <div className="AllNotes">
-        {props.notes
-          .filter((data) => data.isDeleted === false)
-          .filter((data) => data.isArchived === true)
-          .map((data) => (
+        {data.map((data) => (
             <div
               className="noteBlock"
               style={{ backgroundColor: data.color }}>
@@ -102,8 +101,21 @@ export default function DisplayNotes(props) {
                 <InputBase placeholder="Title" value={data.title} />
                 <InputBase placeholder="Take a Note..." value={data.description} />
               </div>
-              <div onMouseEnter={(e) => storeOption(e,data.id)} onMouseOver={setEdit(true)} className="noteOption">
-                <NoteOptions setDelete={setDelete} editId={data.id} setEdited={edit} />
+              <div
+                onMouseEnter={(e) => {
+                  storeOption(e, data.id);
+                  setClr(clr);
+                }}
+                onMouseOver={setEdit(true)}
+                className="noteOption">
+                <NoteOptions
+                getall={getArchiveNotes}
+                  setDelete={setDelete}
+                  archive={archive}
+                  setColor={clr}
+                  editId={data.id}
+                  setEdited={edit}
+                />
               </div>
             </div>
           ))}
@@ -120,7 +132,7 @@ export default function DisplayNotes(props) {
         <Dialog
           open={open}
           onClose={dialogClose} >
-            <AddNote setEdited={edit} dialogOff={dialogClose} editOpen={open} editId={noteId} editTitle={title} editDisc={note} editColor={clr} className={classes.dialogBox} />
+            <AddNote setEdited={edit} archive={archive} getall={getArchiveNotes} dialogOff={dialogClose} editOpen={open} editId={noteId} editTitle={title} editDisc={note} editColor={clr} className={classes.dialogBox} />
         </Dialog>
       </div>
     </div>
