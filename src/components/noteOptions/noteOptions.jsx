@@ -18,9 +18,10 @@ import "./noteOptions.css";
 const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
-  optionButton: {
-    position: "relative",
-  },
+
+  // optionButton: {
+  //   width: "100%"
+  // },
   colorPaper: {
     marginLeft: theme.spacing(5),
   },
@@ -81,9 +82,22 @@ export default function NoteOptions(props) {
   };
 
   const deleted = () => {
-    props.setDelete();
+    let data = {
+      noteIdList: [noteId],
+      isDeleted: true,
+      isArchived: false,
+    };
+    service
+      .deleteNotes(data)
+      .then((data) => {
+        console.log(data);
+        props.getall();
+      })
+      .catch((err) => {
+        console.log("error = " + err);
+      });
     setAnchorE2(null);
-    props.getall();
+    props.setDelete();
   };
 
   const colorsHandleClick = (event) => {
@@ -112,6 +126,9 @@ export default function NoteOptions(props) {
           console.log("Update Color Error = " + err);
         });
     }
+    else{
+      props.setColor(colr);
+    }
   };
 
   const archiveNote = () => {
@@ -123,6 +140,7 @@ export default function NoteOptions(props) {
     service
       .archiveNote(data)
       .then((data) => {
+        props.getall();
         console.log("Archived Note: " + data);
       })
       .catch((err) => {
@@ -131,11 +149,33 @@ export default function NoteOptions(props) {
   };
 
   const deleteForever = () => {
-      
+    let data = {
+      noteIdList: [noteId],
+    };
+    service.deleteForever(data)
+    .then((data) => {
+      console.log("Note deleted "+data);
+      props.getall();
+    })
+    .catch((err) => {
+      console.log("Error while deleting"+err)
+    })
   }
 
   const restore = () => {
-
+    let data = {
+      noteIdList: [noteId],
+      isDeleted: false,
+    };
+    service
+      .deleteNotes(data)
+      .then((data) => {
+        console.log(data);
+        props.getall();
+      })
+      .catch((err) => {
+        console.log("error = " + err);
+      });
   }
 
   const unArchiveNote = () => {
@@ -169,19 +209,19 @@ export default function NoteOptions(props) {
   };
 
   return (
-    <div>
-      <div className={classes.optionButton}>
+    <div className={classes.optionButton}>
+      <div>
         {trash ? (
           <div>
             <IconButton className={classes.button}>
-              <DeleteForeverRoundedIcon onClick={deleteForever()}/>
+              <DeleteForeverRoundedIcon onClick={deleteForever}/>
             </IconButton>
             <IconButton className={classes.button}>
-              <RestoreFromTrashRoundedIcon onClick={restore()}/>
+              <RestoreFromTrashRoundedIcon onClick={restore}/>
             </IconButton>
           </div>
         ) : (
-          <div>
+          <div className='optionfield'>
             <IconButton className={classes.button}>
               <AddAlertIcon />
             </IconButton>

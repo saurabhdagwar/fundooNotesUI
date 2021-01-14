@@ -4,11 +4,13 @@
     padding: 8px;
     display: flex;
     flex-direction: column;
-    border: lightgrey solid 1px;
-    /* box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302),
-    2px 4px 6px 4px rgba(60, 64, 67, 0.149); */
+    justify-content: space-between;
+    border: #d3d3d3 solid 1px;
     border-radius: 8px;
     margin: 1%;
+}
+.optionContainer{
+    height: 30px;
 }
 .inputBlock{
     display: flex;
@@ -21,10 +23,14 @@
 .noteBlock:hover .noteOption{
     display: block;
 }
+.displayText{
+    font-size: large;
+    margin: 3px 4px 4px 4px;
+}
 .AllNotes{
     display: flex;
-    /* flex-direction: column-reverse; */
     flex-flow: wrap;
+    align-items: flex-start;
 }
 
 .addnoteNone{

@@ -10,7 +10,7 @@ import Services from "../../Services/noteServices";
 import "./addNotes.css";
 const service = new Services();
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   titleInput: {
     padding: "10px 15px",
     width: "70%",
@@ -22,9 +22,10 @@ const useStyles = makeStyles(() => ({
   closeNotes: {
     padding: '10px 10px 10px 10px',
     fontSize: '17px',
+    justifySelf: "flex-end",
     fontFamily: 'Google Sans ,Roboto,Arial,sans-serif',
     borderRadius: '5px',
-    cursor: 'pointer'
+    cursor: 'pointer',
   }
 }));
 
@@ -33,8 +34,8 @@ export default function AddNote(props) {
   var [showTitle, titleDisplay] = React.useState(props.editOpen);
   var [title, setTitle] = React.useState(props.editTitle);
   var [note, setNote] = React.useState(props.editDisc);
-  const [clr, setClr] = React.useState("#fafafa");
   const [edit, setEdit] = React.useState(props.setEdited);
+  const [clr, setClr] = React.useState(edit ? props.editColor : "#fafafa");
   const [noteId, setNoteId] = React.useState(props.editId);
   const [archive, setArchive] = React.useState(props.archive);
   const [trash, setTrash] = React.useState(props.trash);
@@ -45,11 +46,10 @@ export default function AddNote(props) {
 
   const closeNote = () => {
     let formData = new FormData();
-    if (title == "" && note == "") {
+    if (title == undefined && note == undefined) {
       console.log("Please Enter Data");
       setClr("#fafafa");
       titleDisplay(false);
-      props.dialogOff();
       return null;
     }
     formData.append("title", title);
@@ -103,6 +103,7 @@ export default function AddNote(props) {
               className={classes.input}
               placeholder="Title"
               value={title}
+              fullWidth
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
@@ -113,6 +114,7 @@ export default function AddNote(props) {
               className={classes.input}
               placeholder="Take a note..."
               value={note}
+              fullWidth
               onChange={(e) => setNote(e.target.value)}
             />
           </div>
@@ -121,11 +123,10 @@ export default function AddNote(props) {
               <CheckBoxOutlinedIcon />
             </IconButton>
             <IconButton>
-              <BrushOutlinedIcon />{" "}
+              <BrushOutlinedIcon />
             </IconButton>
             <IconButton>
-              {" "}
-              <ImageOutlinedIcon />{" "}
+              <ImageOutlinedIcon />
             </IconButton>
           </div>
         </div>
@@ -143,7 +144,7 @@ export default function AddNote(props) {
             trash={trash}
           />
           {trash ? " " :
-          <IconButton className={classes.closeNotes} onClick={closeNote}>
+          <IconButton className="closeNotes" className={classes.closeNotes} onClick={closeNote}>
             CLOSE
           </IconButton>}
         </div>

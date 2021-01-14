@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import InputBase from "@material-ui/core/InputBase";
 import { makeStyles } from "@material-ui/core/styles";
 import NoteOptions from "../noteOptions/noteOptions.jsx";
 import Services from "../../Services/noteServices";
 import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
+import Typography from '@material-ui/core/Typography';
 import "./displayNotes.css";
 const service = new Services();
 
@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
   },
+  noteText: {
+    wordWrap: "break-word",
+    margin: "4px 4px 4px 4px"
+  }
 }));
 
 export default function DisplayNotes(props) {
@@ -30,25 +34,9 @@ export default function DisplayNotes(props) {
   var [note, setNote] = React.useState("");
   const [clr, setClr] = React.useState("#fafafa");
   const [noteId, setNoteId] = React.useState();
-  var [dialogTitle, setdialogTitle] = React.useState("");
-  var [dialogNote, setdialogNote] = React.useState("");
 
   const setDelete = () => {
-    let data = {
-      noteIdList: [noteId],
-      isDeleted: true,
-    };
-    service
-      .deleteNotes(data)
-      .then((data) => {
-        console.log(data);
-        console.log(noteId);
-        props.getall();
-      })
-      .catch((err) => {
-        console.log("error = " + err);
-        dialogClose();
-      });
+    dialogClose();
     setOpen(false);
   };
 
@@ -56,9 +44,7 @@ export default function DisplayNotes(props) {
     e.stopPropagation();
     setEdit(true)
     setTitle(data.title);
-    setdialogTitle(data.title);
     setNote(data.description);
-    setdialogNote(data.description);
     setClr(data.color);
     setNoteId(data.id);
      setOpen(true);
@@ -84,9 +70,10 @@ export default function DisplayNotes(props) {
               className="noteBlock"
               style={{ backgroundColor: data.color }}>
               <div className="inputBlock" onClick={(e) => dialogOpen(e, data)}>
-                <InputBase placeholder="Title" value={data.title} />
-                <InputBase placeholder="Take a Note..." value={data.description} />
+                <Typography className={classes.noteText} >{data.title}</Typography>
+                <Typography className={classes.noteText} >{data.description}</Typography>
               </div>
+              <div className="optionContainer">
               <div
                 onMouseEnter={(e) => {
                   storeOption(e, data.id);
@@ -95,13 +82,14 @@ export default function DisplayNotes(props) {
                 onMouseOver={setEdit(true)}
                 className="noteOption"
               >
-                <NoteOptions
+                <NoteOptions 
                   setDelete={setDelete}
                   setColor={clr}
                   editId={data.id}
                   setEdited={edit}
                   getall={props.getall}
                 />
+              </div>
               </div>
             </div>
           ))}

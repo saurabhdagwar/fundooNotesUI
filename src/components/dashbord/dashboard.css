@@ -71,6 +71,12 @@
 .appsContainer {
   display: flex;
 }
+.MenuList{ 
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ } 
 
 .displayNotes{
   width: 85vw;
@@ -99,5 +105,8 @@
   }
   .headerIcon {
     width: 30px;
+  }
+  .rightOptions {
+    justify-content: flex-end;
   }
 }

@@ -8,3 +8,7 @@
     border: black solid 1px;
     border-radius: 100px;
 }
+.optionfield{
+    display: flex;
+    justify-content: space-between;
+}

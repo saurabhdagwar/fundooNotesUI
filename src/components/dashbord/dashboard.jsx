@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import "./dashboard.css";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -22,14 +22,14 @@ import ListItem from "@material-ui/core/ListItem";
 import AppsRoundedIcon from "@material-ui/icons/AppsRounded";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircle';
 import { Switch } from "react-router-dom";
 import ProtectedRoutes from "../../protectedRoutes.js";
 import Notes from "../Notes/Notes";
 import ArchiveNotes from "../archiveNotes/archiveNotes";
 import TrashNotes from "../TrashNotes/trashNotes";
+import SearchField from "../SearchNotes/searchNotes"
 
-var checkOpen = "close";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -53,6 +53,11 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       width: "0.9em",
       height: "0.9em",
+    },
+  },
+  appBarButton: {
+    [theme.breakpoints.down("xs")]: {
+      padding: "8px 8px 8px 8px"
     },
   },
   drawer: {
@@ -86,7 +91,11 @@ const useStyles = makeStyles((theme) => ({
     borderTopRightRadius: "100px",
     borderBottomRightRadius: "100px",
   },
-
+  profileIcon:{
+    marginTop: "20px",
+    border: "1px solid lightgray",
+    borderRadius: "5px"
+  },
   settingMenu: {
     marginTop: theme.spacing(4),
   },
@@ -105,11 +114,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
   },
+  searchInput:{
+    marginLeft: "10px", 
+    width: "80%"
+  }
 }));
 
 export default function Dashboard(props) {
   const classes = useStyles();
-
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
@@ -118,11 +130,11 @@ export default function Dashboard(props) {
   const [editLabels, setEditLabels] = React.useState(false);
   const [achive, setAchive] = React.useState(false);
   const [trash, setTrash] = React.useState(false);
-  const [show, setShow] = React.useState([]);
+  const [search, setSearch] = React.useState();
+  const [searchTask, setSearchTask] = React.useState(false);
 
   const drawerOpen = () => {
     setOpen(true);
-    checkOpen = "open";
   };
 
   const nextPath = (path) => {
@@ -140,20 +152,26 @@ export default function Dashboard(props) {
   const profileHandleOpen = (event) => {
     setAnchorE2(event.currentTarget);
   };
+
   const profileHandleClose = () => {
     setAnchorE2(null);
   };
+
+  React.useEffect(() => {
+    notesSelect();
+  }, []);
+
+
+  const searchHandleClick = (event) => {
+    nextPath("../dashboard/search");
+  };
+
   const drawerClose = () => {
     setOpen(false);
-    checkOpen = "close";
   };
 
   const drawerOpenClose = () => {
     setOpen(!open);
-  };
-
-  const printNotes = () => {
-    // refs.child.setDisplayNote();
   };
 
   const notesSelect = () => {
@@ -209,14 +227,14 @@ export default function Dashboard(props) {
   };
 
   return (
-    <div className="root" className={classes.root} onLoad={printNotes}>
+    <div className="root" className={classes.root} >
       <CssBaseline />
       <AppBar position="fixed" position="fixed" className={classes.appBar}>
         <Toolbar className={classes.topBar}>
           <span className="leftOptions">
             <div className="startOptions">
               <div className="menuButton">
-                <IconButton onClick={drawerOpenClose} edge="start">
+                <IconButton className={classes.appBarButton} onClick={drawerOpenClose} edge="start">
                   <MenuIcon className={classes.iconLogo} />
                 </IconButton>
               </div>
@@ -232,10 +250,12 @@ export default function Dashboard(props) {
                   <SearchIcon />
                 </div>
               </div>
-              <InputBase
-                className="searchInput"
-                className={classes.iconButton}
+              <InputBase 
+                className={classes.searchInput}
                 placeholder="Search…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onClick={searchHandleClick}
                 classes={{
                   root: "inputRoot",
                   input: "inputInput",
@@ -247,24 +267,24 @@ export default function Dashboard(props) {
           <span className="rightOptions">
             <div className="buttonContainer">
               <div className="searchedButton">
-                <IconButton>
+                <IconButton className={classes.appBarButton}>
                   <SearchIcon className={classes.iconLogo} />
                 </IconButton>
               </div>
               <div className="button">
-                <IconButton>
+                <IconButton className={classes.appBarButton}>
                   <ReplayOutlinedIcon className={classes.iconLogo} />
                 </IconButton>
               </div>
 
               <div className="button">
-                <IconButton>
+                <IconButton className={classes.appBarButton}>
                   <DnsRoundedIcon className={classes.iconLogo} />
                 </IconButton>
               </div>
 
               <div className="button">
-                <IconButton onClick={settingHandleClick}>
+                <IconButton className={classes.appBarButton} onClick={settingHandleClick}>
                   <SettingsSharpIcon className={classes.iconLogo} />
                 </IconButton>
                 <Paper>
@@ -294,15 +314,14 @@ export default function Dashboard(props) {
             </div>
             <div class="appsContainer">
               <div className="button">
-                <IconButton className={classes.iconButton}>
+                <IconButton className={classes.appBarButton}>
                   <AppsRoundedIcon className={classes.iconLogo} />
                 </IconButton>
               </div>
               <div className="button">
                 <IconButton
-                  className={classes.iconButton}
-                  onClick={profileHandleOpen}
-                >
+                className={classes.appBarButton}
+                  onClick={profileHandleOpen}>
                   <AccountCircleOutlinedIcon className={classes.iconLogo} />
                 </IconButton>
                 <Paper>
@@ -312,6 +331,10 @@ export default function Dashboard(props) {
                     open={Boolean(anchorE2)}
                     onClose={profileHandleClose}
                   >
+                    <div className="MenuList">
+                    <MenuItem>
+                    <AccountCircleOutlinedIcon color="primary" style={{ fontSize: 65 }}/>
+                    </MenuItem>
                     <MenuItem>
                       {localStorage.getItem("fundooUserFName")}{" "}
                       {localStorage.getItem("fundooUserLName")}
@@ -319,10 +342,10 @@ export default function Dashboard(props) {
                     <MenuItem>
                       {localStorage.getItem("fundooUserEmail")}{" "}
                     </MenuItem>
-                    <MenuItem onClick={logOut} color="primary">
-                      {" "}
-                      LogOut{" "}
+                    <MenuItem onClick={logOut} className={classes.profileIcon} >
+                      LogOut
                     </MenuItem>
+                    </div>
                   </Menu>
                 </Paper>
               </div>
@@ -443,13 +466,16 @@ export default function Dashboard(props) {
           <div className={classes.content}>
             <Switch>
               <ProtectedRoutes path="/dashboard/notes">
-                <Notes />
+                <Notes search={search} />
               </ProtectedRoutes>
               <ProtectedRoutes path="/dashboard/archive">
                 <ArchiveNotes />
               </ProtectedRoutes>
               <ProtectedRoutes path="/dashboard/trash">
                 <TrashNotes />
+              </ProtectedRoutes>
+              <ProtectedRoutes path="/dashboard/search">
+                <SearchField search={search}/> 
               </ProtectedRoutes>
             </Switch>
           </div>

@@ -5,6 +5,7 @@ import NoteOptions from "../noteOptions/noteOptions.jsx";
 import Services from "../../Services/noteServices";
 import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
+import Typography from '@material-ui/core/Typography';
 import "./archiveNotes.css";
 const service = new Services();
 
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
   },
+  noteText: {
+    wordWrap: "break-word",
+    margin: "4px 4px 4px 4px"
+  }
 }));
 
 export default function ArchiveNotes(props) {
@@ -98,11 +103,11 @@ export default function ArchiveNotes(props) {
               className="noteBlock"
               style={{ backgroundColor: data.color }}>
               <div className="inputBlock" onClick={(e) => dialogOpen(e, data)}>
-                <InputBase placeholder="Title" value={data.title} />
-                <InputBase placeholder="Take a Note..." value={data.description} />
+              <Typography className={classes.noteText} >{data.title}</Typography>
+                <Typography className={classes.noteText} >{data.description}</Typography>
               </div>
-              <div
-                onMouseEnter={(e) => {
+              <div className="optionContainer">
+              <div onMouseEnter={(e) => {
                   storeOption(e, data.id);
                   setClr(clr);
                 }}
@@ -116,6 +121,7 @@ export default function ArchiveNotes(props) {
                   editId={data.id}
                   setEdited={edit}
                 />
+              </div>
               </div>
             </div>
           ))}

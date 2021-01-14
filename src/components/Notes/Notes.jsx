@@ -1,13 +1,13 @@
-import React from  "react";
+import React from "react";
 import AddNotes from "../addNotes/addNotes";
 import DisplayNotes from "../displayNotes/displayNotes";
 import Services from "../../Services/noteServices";
-import "./Notes.css"
+import "./Notes.css";
 const service = new Services();
 
 export default function Notes(props) {
-    const [show, setShow] = React.useState([]);
-    
+  const [show, setShow] = React.useState([]);
+
   React.useEffect(() => {
     getAllNotes();
   }, []);
@@ -26,10 +26,13 @@ export default function Notes(props) {
       });
   };
 
-    return (
-        <div className="mainContent">
-            <AddNotes  getall={getAllNotes} />        
-            <DisplayNotes notes={show} getall={getAllNotes} />
-        </div>
-    )
+
+  return (
+    <div className="mainContent">
+      <AddNotes getall={getAllNotes} />
+      <DisplayNotes notes={show} getall={getAllNotes} />
+      <div>
+      </div>
+    </div>
+  );
 }

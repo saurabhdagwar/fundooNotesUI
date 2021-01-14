@@ -5,12 +5,12 @@ import Services from "../../Services/noteServices";
 import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
 import NoteOptions from "../noteOptions/noteOptions.jsx";
+import Typography from '@material-ui/core/Typography';
 import "./trashNotes.css";
 const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
   dialogBox: {
-    // width: "40vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
   },
+  noteText: {
+    wordWrap: "break-word",
+    margin: "4px 4px 4px 4px"
+  }
 }));
 
 export default function TrashNotes(props) {
@@ -43,7 +47,7 @@ export default function TrashNotes(props) {
       .then((data) => {
         let arrayData = data.data.data.data;
         let array = arrayData.reverse();
-        console.log("Trash Note List"+array);
+        // console.log("Trash Note List"+array);
         setData(array);
       })
       .catch((err) => {
@@ -78,9 +82,10 @@ export default function TrashNotes(props) {
               className="noteBlock"
               style={{ backgroundColor: data.color }}>
               <div className="inputBlock" onClick={(e) => dialogOpen(e, data)}>
-                <InputBase placeholder="Title" value={data.title} />
-                <InputBase placeholder="Take a Note..." value={data.description} />
+              <Typography className={classes.noteText} >{data.title}</Typography>
+                <Typography className={classes.noteText} >{data.description}</Typography>
               </div>
+              <div className="optionContainer">
               <div
                 onMouseEnter={(e) => {
                   storeOption(e, data.id);
@@ -88,7 +93,8 @@ export default function TrashNotes(props) {
                 }}
                 onMouseOver={setEdit(true)}
                 className="noteOption">
-              <NoteOptions trash={trash}/>
+              <NoteOptions trash={trash} editId={noteId} getall={getTrashNotes}/>
+              </div>
               </div>
             </div>
           ))}
@@ -105,7 +111,7 @@ export default function TrashNotes(props) {
         <Dialog
           open={open}
           onClose={dialogClose} >
-            <AddNote trash={trash} setEdited={edit} dialogOff={dialogClose} editOpen={open} editId={noteId} editTitle={title} editDisc={note} editColor={clr} className={classes.dialogBox} />
+            <AddNote trash={trash} setEdited={edit} getall={getTrashNotes} dialogOff={dialogClose} editOpen={open} editId={noteId} editTitle={title} editDisc={note} editColor={clr} className={classes.dialogBox} />
         </Dialog>
       </div>
     </div>
