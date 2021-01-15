@@ -85,6 +85,7 @@ export default function DisplayNotes(props) {
                 <NoteOptions 
                   setDelete={setDelete}
                   setColor={clr}
+                  setClr={setClr}
                   editId={data.id}
                   setEdited={edit}
                   getall={props.getall}

@@ -35,10 +35,11 @@ export default function AddNote(props) {
   var [title, setTitle] = React.useState(props.editTitle);
   var [note, setNote] = React.useState(props.editDisc);
   const [edit, setEdit] = React.useState(props.setEdited);
-  const [clr, setClr] = React.useState(edit ? props.editColor : "#fafafa");
+  const [clr, setClr] = React.useState(props.editColor);
   const [noteId, setNoteId] = React.useState(props.editId);
   const [archive, setArchive] = React.useState(props.archive);
   const [trash, setTrash] = React.useState(props.trash);
+  const[takeNote, setTakeNote] = React.useState(true);
 
   const clickedNote = () => {
     titleDisplay(true);
@@ -137,16 +138,19 @@ export default function AddNote(props) {
       >
         <div className="addNoteOptions">
           <NoteOptions
-            setColor={setClr}
+            setClr={setClr}
             setEdited={edit}
+            getall={props.getall}
             editId={props.editId}
             archive={archive}
             trash={trash}
+            dialogOff={props.dialogOff}
+            takeNote={takeNote}
           />
           {trash ? " " :
-          <IconButton className="closeNotes" className={classes.closeNotes} onClick={closeNote}>
+         <div className="closeNotes">  <IconButton  className={classes.closeNotes} onClick={closeNote}>
             CLOSE
-          </IconButton>}
+          </IconButton></div>}
         </div>
       </div>
     </div>

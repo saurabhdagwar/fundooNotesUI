@@ -19,9 +19,9 @@ const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
 
-  // optionButton: {
-  //   width: "100%"
-  // },
+  optionButton: {
+    width: "100%"
+  },
   colorPaper: {
     marginLeft: theme.spacing(5),
   },
@@ -97,7 +97,7 @@ export default function NoteOptions(props) {
         console.log("error = " + err);
       });
     setAnchorE2(null);
-    props.setDelete();
+    // props.setDelete();
   };
 
   const colorsHandleClick = (event) => {
@@ -126,9 +126,7 @@ export default function NoteOptions(props) {
           console.log("Update Color Error = " + err);
         });
     }
-    else{
-      props.setColor(colr);
-    }
+      props.setClr(colr);
   };
 
   const archiveNote = () => {

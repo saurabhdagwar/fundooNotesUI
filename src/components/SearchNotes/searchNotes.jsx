@@ -2,8 +2,6 @@ import React from "react";
 import "../displayNotes/displayNotes.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Services from "../../Services/noteServices";
-import Dialog from "@material-ui/core/Dialog";
-import AddNote from "../addNotes/addNotes";
 import NoteOptions from "../noteOptions/noteOptions.jsx";
 import Typography from "@material-ui/core/Typography";
 const service = new Services();

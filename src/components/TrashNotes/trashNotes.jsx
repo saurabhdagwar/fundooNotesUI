@@ -6,7 +6,7 @@ import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
 import NoteOptions from "../noteOptions/noteOptions.jsx";
 import Typography from '@material-ui/core/Typography';
-import "./trashNotes.css";
+import "../displayNotes/displayNotes.css";
 const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
@@ -93,7 +93,7 @@ export default function TrashNotes(props) {
                 }}
                 onMouseOver={setEdit(true)}
                 className="noteOption">
-              <NoteOptions trash={trash} editId={noteId} getall={getTrashNotes}/>
+              <NoteOptions trash={trash} editId={noteId}  setClr={setClr} getall={getTrashNotes}/>
               </div>
               </div>
             </div>

@@ -50,9 +50,14 @@
        width: 45%;
    }
 }
-@media only screen and (max-width: 380px){
+@media only screen and (max-width: 400px){
    .addNoteOptions{
        display: flex;
        flex-direction: column;
+   }
+   .closeNotes{
+       width: 100%;
+       display: flex;
+       justify-content: flex-end;
    }
  }

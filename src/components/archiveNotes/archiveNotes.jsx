@@ -6,7 +6,7 @@ import Services from "../../Services/noteServices";
 import Dialog from "@material-ui/core/Dialog";
 import AddNote from "../addNotes/addNotes";
 import Typography from '@material-ui/core/Typography';
-import "./archiveNotes.css";
+import "../displayNotes/displayNotes.css";
 const service = new Services();
 
 const useStyles = makeStyles((theme) => ({
@@ -118,6 +118,7 @@ export default function ArchiveNotes(props) {
                   setDelete={setDelete}
                   archive={archive}
                   setColor={clr}
+                  setClr={setClr}
                   editId={data.id}
                   setEdited={edit}
                 />
